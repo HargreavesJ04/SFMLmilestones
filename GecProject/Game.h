@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include <iostream>
 #include "Character.h"
+#include "Collision.h"
+
 
 class Game
 {
@@ -12,11 +14,10 @@ public:
 
     void endApplication();   
     void UpdateDt();        
-    void updateEvents();     
-    void updateSFML();       
+    void updateEvents();          
     void render();          
     void run();             
-
+    
 private:
     void initWindow();       
     void initGraphics();     
@@ -31,6 +32,7 @@ private:
 	Graphics* texGraphics = new Graphics; 
     sf::Time time = sf::milliseconds(50);
     Character player;
+   // Collision box;
 };
 
 

@@ -1,5 +1,7 @@
 #include "Game.h"
 
+Collision box;
+
 Game::Game()
 {
     this->initWindow();
@@ -24,6 +26,10 @@ void Game::UpdateDt()
 void Game::initGraphics()
 {
     
+	box.colliderX = 200;
+    box.colliderY = 200;
+    box.colliderWidth = 432;
+    box.colliderHeight = 521;
 
     if (!texGraphics->loadTexture("Data/Textures/MaleZombie/idle_combined.png", "IDLEtex"))
         std::cerr << "Failed to load texture: Idle (1).png\n";
@@ -49,10 +55,6 @@ void Game::initGraphics()
    
 }
 
-void Game::updateSFML()
-{
-    
-}
 
 void Game::updateEvents()
 {
@@ -72,6 +74,7 @@ void Game::render()
 {
     this->window->clear();
     
+    
 
 	player.move(); 
 
@@ -90,7 +93,7 @@ void Game::render()
 
     this->window->display(); 
     sf::sleep(time);
-
+    box.CheckCollision(player);
     player.moving = false;
 }
 
@@ -100,7 +103,6 @@ void Game::run()
     {
         this->UpdateDt();
         this->updateEvents();
-        this->updateSFML();
         this->render();
 		
     }
