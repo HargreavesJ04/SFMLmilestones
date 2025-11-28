@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "Sprite2D.h"
 #include "graphics.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
 
 class Character : public Entity
 {
@@ -22,6 +24,7 @@ public:
 
 	void move();
 	 
+	void initGraphics();
 
 	bool moving = false; 
 	bool movingBack = false; 
@@ -35,10 +38,9 @@ public:
 	sf::Vector2f position;
 	sf::Vector2f size;
 
-private: 
 
+	Graphics* texGraphics = new Graphics;
 
-
-
+	
 };
 

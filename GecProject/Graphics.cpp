@@ -55,6 +55,11 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 
 	Sprite2D* briefName = m_spritemap[spriteName];
 
+	if (briefName == nullptr) {
+		std::cerr << "Sprite2D object for '" << spriteName << "' is null." << std::endl;
+		return;
+	}
+
 	briefName->sprite->setTexture(*briefName->m_animationData[spriteSetName].texture);
 
 	briefName->sprite->setPosition(pos);
@@ -63,7 +68,8 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 	int frameY = briefName->m_animationData[spriteSetName].texture->getSize().y / briefName->m_animationData[spriteSetName].setData.numFrames;
 	int topCorner = frameY * briefName->frameNumber;
 	briefName->sprite->setTextureRect(sf::IntRect({ 0 , topCorner }, { frameX, frameY })); 
-
+	
+	
 
 	
 	if (briefName->frameNumber < briefName->m_animationData[spriteSetName].setData.numFrames - 1)
@@ -77,6 +83,8 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 
 	
 }
+
+
 
 
 void Graphics::Draw(sf::RenderWindow& window)

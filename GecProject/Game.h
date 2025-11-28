@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Character.h"
 #include "Collision.h"
+#include "Sprite2D.h"
 
 
 class Game
@@ -29,7 +30,7 @@ private:
     float deltaTime = 0.f;
     sf::Clock dtClock;
 
-	Graphics* texGraphics = new Graphics; 
+	//Graphics* texGraphics = new Graphics;
     sf::Time time = sf::milliseconds(50);
     Character player;
    // Collision box;
