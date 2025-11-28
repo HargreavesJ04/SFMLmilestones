@@ -1,11 +1,10 @@
 #include "Game.h"
 
-Collision box;
+
 
 Game::Game()
 {
     this->initWindow();
-    this->initBox();
 	player.initGraphics();
 }
 
@@ -24,17 +23,6 @@ void Game::UpdateDt()
     this->deltaTime = this->dtClock.restart().asSeconds();
 }
 
-void Game::initBox()
-{
-    
-	box.colliderX = 200;
-    box.colliderY = 200;
-    box.colliderWidth = 432;
-    box.colliderHeight = 521;
-
-
-   
-}
 
 
 void Game::updateEvents()
@@ -64,7 +52,6 @@ void Game::render()
 
     this->window->display(); 
     sf::sleep(time);
-    box.CheckCollision(player);
     player.moving = false;
 }
 

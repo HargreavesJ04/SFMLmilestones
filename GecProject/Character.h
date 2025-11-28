@@ -4,17 +4,20 @@
 #include "graphics.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Collision.h"
+
 
 class Character : public Entity
 {
-public: 
+public:
 
 	enum Movement
 	{
 		Jump,
 		Crouch,
 		Left,
-		Right
+		Right,
+		Falling
 	};
 
 	void up();
@@ -23,23 +26,30 @@ public:
 	void right();
 
 	void move();
-	 
 	void initGraphics();
 
-	bool moving = false; 
-	bool movingBack = false; 
 
-	float x = 0.f;
-	float y = 0.f;
+	Graphics* texGraphics = new Graphics;
+	bool moving = false;
+
+
+
+	bool movingBack = false;
+	bool airborne;
+
+	
 
 	float xspeed = 5.f;
 	float yspeed = 10.f;
 
-	sf::Vector2f position;
-	sf::Vector2f size;
+	sf::Vector2f position{ 0, 0 };
+	sf::Vector2f size{ 0, 0 };
 
+	
+	
+	sf::FloatRect rb{position, size};
 
-	Graphics* texGraphics = new Graphics;
+	Collision box = { rb };
 
 	
 };

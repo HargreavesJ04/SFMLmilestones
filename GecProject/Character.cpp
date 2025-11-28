@@ -33,9 +33,9 @@ void Character::up()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 	{
-		y -= yspeed;
+		position.y -= yspeed;
 		moving = true;
-		texGraphics->RenderSprite("Player", sf::Vector2f(x, y), "WALK", 0);
+		texGraphics->RenderSprite("Player", position, "WALK", 0);
 	}
 }
 
@@ -43,9 +43,9 @@ void Character::down()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 	{
-		y += yspeed;
+		position.y += yspeed;
 		moving = true;
-		texGraphics->RenderSprite("Player", sf::Vector2f(x, y), "WALK", 0);
+		texGraphics->RenderSprite("Player", position, "WALK", 0);
 	}
 }
 
@@ -53,9 +53,9 @@ void Character::left()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
-		x -= xspeed;
+		position.x -= xspeed;
 		moving = true;
-		texGraphics->RenderSprite("Player", sf::Vector2f(x, y), "WALK", 0);
+		texGraphics->RenderSprite("Player", position, "WALK", 0);
 	}
 }
 
@@ -63,16 +63,16 @@ void Character::right()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
-		x += xspeed;
+		position.x += xspeed;
 		moving = true;
-		texGraphics->RenderSprite("Player", sf::Vector2f(x, y), "WALK", 0);
+		texGraphics->RenderSprite("Player", position, "WALK", 0);
 		
 	}
 }
 
 void Character::move()
 {
-	texGraphics->RenderSprite("Player", sf::Vector2f(x, y), "IDLE", 0);
+	texGraphics->RenderSprite("Player", position, "IDLE", 0);
 	moving = false;
 	up();
 	down();

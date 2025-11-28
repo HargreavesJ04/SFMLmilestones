@@ -5,15 +5,12 @@
 class Collision
 {
 public:
-	int colliderX;
-	int colliderY;
-	int colliderWidth;
-	int colliderHeight;
+	
+	Collision(sf::FloatRect& boxcollider); 
 
-
-	bool CheckCollision(Character& OtherActor);
+	bool CheckCollision(sf::FloatRect OtherActor);
 private: 
 
-
+	sf::FloatRect collider;
 };
 

@@ -21,7 +21,7 @@ public:
     
 private:
     void initWindow();       
-    void initBox();     
+         
 
 
     sf::RenderWindow* window = nullptr;
