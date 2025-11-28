@@ -21,7 +21,7 @@ public:
     
 private:
     void initWindow();       
-    void initGraphics();     
+    void initBox();     
 
 
     sf::RenderWindow* window = nullptr;
@@ -30,10 +30,10 @@ private:
     float deltaTime = 0.f;
     sf::Clock dtClock;
 
-	//Graphics* texGraphics = new Graphics;
+	
     sf::Time time = sf::milliseconds(50);
     Character player;
-   // Collision box;
+   
 };
 
 

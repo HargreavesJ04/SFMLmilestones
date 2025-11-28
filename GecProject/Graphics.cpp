@@ -26,6 +26,8 @@ bool Graphics::createSprite(const std::string& name)
 {
 	Sprite2D* newSprite = new Sprite2D; 
 
+
+
 	m_spritemap[name] = newSprite;
 
 	return false;
