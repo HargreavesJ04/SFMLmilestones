@@ -45,12 +45,8 @@ public:
 	sf::Vector2f position{ 0, 0 };
 	sf::Vector2f size{ 0, 0 };
 
-	
-	
-	sf::FloatRect rb{position, size};
 
-	Collision box = { rb };
 
-	
+	Collision box{ {position,size} };
 };
 

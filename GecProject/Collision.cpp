@@ -1,6 +1,7 @@
 #include "Collision.h"
+#include <iostream>
 
-Collision::Collision(sf::FloatRect& boxcollider)
+Collision::Collision(sf::FloatRect boxcollider)
 {
 	collider = boxcollider;
 }

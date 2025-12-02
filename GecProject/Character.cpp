@@ -29,6 +29,7 @@ void Character::initGraphics()
 
 }
 
+
 void Character::up()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
