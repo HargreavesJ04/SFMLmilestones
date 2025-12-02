@@ -25,6 +25,8 @@ public:
 	void left();
 	void right();
 
+	void PlayerCamera(sf::RenderWindow& window);
+
 	void move();
 	void initGraphics();
 

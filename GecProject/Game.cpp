@@ -6,6 +6,7 @@ Game::Game()
 {
     this->initWindow();
 	player.initGraphics();
+	
 	enemy.initEnemyGraphics();
 }
 
@@ -48,6 +49,10 @@ void Game::render()
 
 	player.move(); 
 	
+    
+
+    // activate it
+    
 
 	
    player.texGraphics->Draw(*this->window); 
@@ -65,12 +70,14 @@ void Game::run()
         this->UpdateDt();
         this->updateEvents();
         this->render();
-		
+      
     }
 }
 
 void Game::initWindow()
 {
+    
+
     this->window = new sf::RenderWindow(
         sf::VideoMode({ 800, 600 }),
         "GEC Start Project"
