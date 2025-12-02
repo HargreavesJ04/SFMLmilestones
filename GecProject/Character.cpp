@@ -57,7 +57,7 @@ void Character::left()
 		position.x -= xspeed;
 		moving = true;
 		texGraphics->RenderSprite("Player", position, "WALK", 0);
-		view.move({ 100.f, 100.f });
+		
 	}
 }
 
@@ -74,9 +74,7 @@ void Character::right()
 
 void Character::PlayerCamera(sf::RenderWindow& window)
 {
-	sf::View view(sf::FloatRect({ 0.f, 0.f }, { 800.f, 600.f }));
-
-	window.setView(view); 
+	
 	
 }
 

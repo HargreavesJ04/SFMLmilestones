@@ -4,9 +4,9 @@
 
 Game::Game()
 {
-    this->initWindow();
+    initWindow();
 	player.initGraphics();
-	
+    
 	enemy.initEnemyGraphics();
 }
 
@@ -49,11 +49,24 @@ void Game::render()
 
 	player.move(); 
 	
+  
+    sf::View view(sf::FloatRect({ 100.f, 100.f }, { 400.f, 300.f }));
+
     
 
-    // activate it
     
+    this->window->setView(view);
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    {
+        view.setRotation(sf::degrees(20));
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
+        view.move({ 100.f, 100.f });
+     
+    }
 	
    player.texGraphics->Draw(*this->window); 
    enemy.texGraphics->Draw(*this->window);
@@ -78,8 +91,5 @@ void Game::initWindow()
 {
     
 
-    this->window = new sf::RenderWindow(
-        sf::VideoMode({ 800, 600 }),
-        "GEC Start Project"
-    );
+    this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }),  "GEC Start Project" );
 }
