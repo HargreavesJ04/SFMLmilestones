@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Character.h"
 #include "Sprite2D.h"
+#include "Enemy.h"
 
 
 class Game
@@ -32,6 +33,7 @@ private:
 	
     sf::Time time = sf::milliseconds(50);
     Character player;
+	Enemy enemy;
    
 };
 

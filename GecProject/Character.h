@@ -42,8 +42,8 @@ public:
 	float xspeed = 5.f;
 	float yspeed = 10.f;
 
-	sf::Vector2f position{ 0, 0 };
-	sf::Vector2f size{ 0, 0 };
+	sf::Vector2f position{ 1, 1 };
+	sf::Vector2f size{ 1000, 1000 };
 
 
 

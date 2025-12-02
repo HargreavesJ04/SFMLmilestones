@@ -6,6 +6,7 @@ Game::Game()
 {
     this->initWindow();
 	player.initGraphics();
+	enemy.initEnemyGraphics();
 }
 
 Game::~Game()
@@ -46,13 +47,15 @@ void Game::render()
     
 
 	player.move(); 
+	
 
 	
    player.texGraphics->Draw(*this->window); 
+   enemy.texGraphics->Draw(*this->window);
 
     this->window->display(); 
     sf::sleep(time);
-    player.moving = false;
+   
 }
 
 void Game::run()
