@@ -149,6 +149,7 @@
     <ClCompile Include="IMGUI\imgui_draw.cpp" />
     <ClCompile Include="IMGUI\imgui_tables.cpp" />
     <ClCompile Include="IMGUI\imgui_widgets.cpp" />
+    <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RedirectCout.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="ExternalHeaders.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sprite2D.h" />
   </ItemGroup>

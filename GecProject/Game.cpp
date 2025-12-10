@@ -2,6 +2,7 @@
 
 
 
+
 Game::Game()
 {
     initWindow();
