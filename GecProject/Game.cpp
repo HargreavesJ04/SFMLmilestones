@@ -44,36 +44,23 @@ void Game::updateEvents()
 void Game::render()
 {
     this->window->clear();
-    
-    
 
-	player.move(); 
-	
-  
-    sf::View view(sf::FloatRect({ 100.f, 100.f }, { 400.f, 300.f }));
+    player.move();
 
-    
+    enemy.box.Move(enemy.position);
 
-    
+    player.box.CheckCollision(enemy.box.GetBox());
+
+    sf::View view;
+    view.setSize({ 400.f, 300.f });
+    view.setCenter(player.position);
     this->window->setView(view);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-    {
-        view.setRotation(sf::degrees(20));
-    }
+    player.texGraphics->Draw(*this->window);
+    enemy.texGraphics->Draw(*this->window);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-    {
-        view.move({ 100.f, 100.f });
-     
-    }
-	
-   player.texGraphics->Draw(*this->window); 
-   enemy.texGraphics->Draw(*this->window);
-
-    this->window->display(); 
+    this->window->display();
     sf::sleep(time);
-   
 }
 
 void Game::run()
@@ -91,5 +78,5 @@ void Game::initWindow()
 {
     
 
-    this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }),  "GEC Start Project" );
+    this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }),  "GEC Start Project [Totally Not Catlevania]" );
 }

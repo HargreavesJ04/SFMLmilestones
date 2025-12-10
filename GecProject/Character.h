@@ -44,11 +44,11 @@ public:
 	float xspeed = 5.f;
 	float yspeed = 10.f;
 
-	sf::Vector2f position{ 1, 1 };
-	sf::Vector2f size{ 1000, 1000 };
+	sf::Vector2f position{ 100, 100 };
+	sf::Vector2f size{ 60.f, 62.f };
 
 
 
-	Collision box{ {position,size} };
+	Collision box{{position,size} };
 };
 

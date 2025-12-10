@@ -86,7 +86,9 @@ void Character::move()
 	down();
 	left();
 	right();
-}
 
+	
+	box.Move(position);
+}
 
 
