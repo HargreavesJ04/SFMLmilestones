@@ -39,9 +39,6 @@
     <ClCompile Include="IMGUI\imgui-SFML.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="RedirectCout.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="level.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RedirectCout.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,5 +107,8 @@
     <ClInclude Include="level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

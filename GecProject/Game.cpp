@@ -52,6 +52,9 @@ void Game::render()
 
     player.box.CheckCollision(enemy.box.GetBox());
 
+
+	
+
     sf::View view;
     view.setSize({ 400.f, 300.f });
     view.setCenter(player.position);

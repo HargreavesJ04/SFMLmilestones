@@ -1,10 +1,12 @@
 #pragma once
+
+
 #include <SFML/Graphics.hpp>
-#include "Graphics.h"
 #include <iostream>
 #include "Character.h"
 #include "Sprite2D.h"
 #include "Enemy.h"
+#include "level.h" 
 
 
 class Game
@@ -34,7 +36,7 @@ private:
     sf::Time time = sf::milliseconds(50);
     Character player;
 	Enemy enemy;
-   
+    level test;
 };
 
 
