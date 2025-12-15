@@ -5,25 +5,30 @@
 
 Game::Game()
 {
+
+    if (music.openFromFile("Data/Audio/Vampire-Killer.wav"))
+    {
+        music.setVolume(50); 
+        music.setLooping(true); 
+        music.play();
+    }
+
     initWindow();
-	player.initGraphics();
-    
-	enemy.initEnemyGraphics();
+	initGraphics();
+	Alucard.initGraphics(loadtex);
+	enemy.initGraphics(loadtex);
 }
 
 Game::~Game()
 {
     delete this->window;
-}
-
-void Game::endApplication()
-{
-   
+    delete this->loadtex;
 }
 
 void Game::UpdateDt()
 {
     this->deltaTime = this->dtClock.restart().asSeconds();
+
 }
 
 
@@ -36,9 +41,6 @@ void Game::updateEvents()
         if (sfEvent->is<sf::Event::Closed>())
             this->window->close();
 		
-
-		
-		
     }
 }
 
@@ -46,22 +48,24 @@ void Game::render()
 {
     this->window->clear();
 
-    player.move();
+	Alucard.move();
+	enemy.move();
 
-    enemy.box.Move(enemy.position);
+    if (Alucard.CheckCollision(enemy))
+    {
+        std::cout << "Collision Detected!" << std::endl;
+		Alucard.takeDamage(1);
 
-    player.box.CheckCollision(enemy.box.GetBox());
-
-
-	
-
+    }
+   
     sf::View view;
     view.setSize({ 400.f, 300.f });
-    view.setCenter(player.position);
+    view.setCenter(Alucard.position);
     this->window->setView(view);
 
-    player.texGraphics->Draw(*this->window);
-    enemy.texGraphics->Draw(*this->window);
+    loadtex->Draw(*this->window);
+   
+    
 
     this->window->display();
     sf::sleep(time);
@@ -74,13 +78,27 @@ void Game::run()
         this->UpdateDt();
         this->updateEvents();
         this->render();
-      
+        
     }
+}
+
+void Game::initGraphics()
+{
+    if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex"));
+	if (!loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png", "ATTACKtex"));
+	if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "WALKtex"));
+	
+	loadtex->createSprite("Player");
+
+    if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EIDLEtex"));
+	if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex"));
+	
+	loadtex->createSprite("Enemy");
 }
 
 void Game::initWindow()
 {
     
-
+   
     this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }),  "GEC Start Project [Totally Not Catlevania]" );
 }

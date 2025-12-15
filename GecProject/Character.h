@@ -1,9 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "Sprite2D.h"
 #include "graphics.h"
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include "Collision.h"
 
 
@@ -13,42 +10,35 @@ public:
 
 	enum Movement
 	{
+		Idle,
 		Jump,
 		Crouch,
 		Left,
 		Right,
-		Falling
+		Falling,
+		Attack
 	};
 
-	void up();
-	void down();
-	void left();
-	void right();
+	
+	virtual void initGraphics(Graphics* graphics);
 
-	void PlayerCamera(sf::RenderWindow& window);
+	void takeDamage(int damage);
+	bool CheckCollision(Character& other);
 
-	void move();
-	void initGraphics();
-
-
-	Graphics* texGraphics = new Graphics;
 	bool moving = false;
-
-
-
 	bool movingBack = false;
 	bool airborne;
-
-	
-
 	float xspeed = 5.f;
 	float yspeed = 10.f;
-
-	/*sf::Vector2f position{ 100, 100 };
-	sf::Vector2f size{ 60.f, 62.f };*/
-
-
+	
+protected:
 
 	Collision box{{position,size} };
+	Graphics* texGraphics = nullptr;
+	Movement currentState = Idle;
+	
+
+	//these dont do anything yet :/
+	int health = 100;
 };
 

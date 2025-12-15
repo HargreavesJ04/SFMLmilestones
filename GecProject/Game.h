@@ -1,10 +1,8 @@
 #pragma once
 
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include "Character.h"
-#include "Sprite2D.h"
+#include <SFML/Audio.hpp>
+#include "Player.h"
 #include "Enemy.h"
 #include "level.h" 
 
@@ -14,12 +12,12 @@ class Game
 public:
     Game();
     virtual ~Game();
-
-    void endApplication();   
+ 
     void UpdateDt();        
     void updateEvents();          
     void render();          
-    void run();             
+    void run();       
+    void initGraphics();
     
 private:
     void initWindow();       
@@ -31,10 +29,13 @@ private:
 
     float deltaTime = 0.f;
     sf::Clock dtClock;
+    sf::Time time = sf::milliseconds(50);
+
+    Graphics* loadtex = new Graphics();
 
 	
-    sf::Time time = sf::milliseconds(50);
-    Character player;
+    sf::Music music;
+	Player Alucard;
 	Enemy enemy;
     level test;
 };

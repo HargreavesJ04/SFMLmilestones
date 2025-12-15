@@ -1,20 +1,40 @@
 #include "Enemy.h"
-#include <iostream>
 
-void Enemy::initEnemyGraphics()
+
+void Enemy::initGraphics(Graphics* texGraphics)
 {
-	position = { 400.f, 300.f };
-	size = { 60.f, 62.f };
 
-	if (!texGraphics->loadTexture("Data/Textures/MaleZombie/attack_combined.png", "ENEMY_ATTACKtex"))
-		std::cout << "Failed to load texture: Enemy Attack (1).png\n";
-	if (!texGraphics->loadTexture("Data/Textures/MaleZombie/walk_combined.png", "ENEMY_WALKtex"))
-		std::cout << "Failed to load texture: Enemy Walk (1).png\n";
 
-	texGraphics->createSprite("EnemySprite");
+	Character::initGraphics(texGraphics);
+	position = { 150.f, 100.f };
 
-	texGraphics->AddAnimationSet("ENEMY_ATTACK", "EnemySprite",
-		AnimationData{ "ENEMY_ATTACKtex", 8,  432, 521 });
+	texGraphics->AddAnimationSet("IDLE", "Enemy", AnimationData{ "EIDLEtex", 5, 60, 62 });
+	texGraphics->AddAnimationSet("WALK", "Enemy", AnimationData{ "EWALKtex", 5, 60, 62 });
+}
 
-	texGraphics->RenderSprite("EnemySprite", position, "ENEMY_ATTACK", 0);
+void Enemy::move()
+{
+	currentState = Idle;
+
+	box.Move(position);
+
+	if (texGraphics)
+	{
+		std::string animName = setAnimationName(currentState);
+		texGraphics->RenderSprite("Enemy", position, animName, 0);
+	}
+}
+
+std::string Enemy::setAnimationName(Movement state)
+{
+	switch(state)
+	{
+	case Movement::Left:
+	case Movement::Right:
+		return "WALK";
+	case Movement::Attack:
+		return "ATTACK";
+	default:
+		return "IDLE";
+	}
 }

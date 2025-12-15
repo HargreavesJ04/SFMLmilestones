@@ -4,9 +4,12 @@ class Enemy : public Character
 {
 public:
 
-	void initEnemyGraphics();
+	void initGraphics(Graphics* texGraphics) override;
+	void move();
 
-	
 
+private:
+
+	std::string setAnimationName(Movement state);
 };
 
