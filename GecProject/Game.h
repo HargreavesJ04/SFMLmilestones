@@ -21,9 +21,7 @@ public:
     
 private:
     void initWindow();       
-         
-
-
+    
     sf::RenderWindow* window = nullptr;
     std::optional<sf::Event> sfEvent;
 

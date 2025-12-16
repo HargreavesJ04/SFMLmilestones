@@ -84,14 +84,14 @@ void Game::run()
 
 void Game::initGraphics()
 {
-    if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex"));
-	if (!loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png", "ATTACKtex"));
-	if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "WALKtex"));
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","IDLEtex");
+    loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png","ATTACKtex");
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","WALKtex");
 	
 	loadtex->createSprite("Player");
 
-    if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EIDLEtex"));
-	if (!loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex"));
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EIDLEtex");
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EWALKtex");
 	
 	loadtex->createSprite("Enemy");
 }

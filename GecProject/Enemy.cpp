@@ -8,8 +8,8 @@ void Enemy::initGraphics(Graphics* texGraphics)
 	Character::initGraphics(texGraphics);
 	position = { 150.f, 100.f };
 
-	texGraphics->AddAnimationSet("IDLE", "Enemy", AnimationData{ "EIDLEtex", 5, 60, 62 });
-	texGraphics->AddAnimationSet("WALK", "Enemy", AnimationData{ "EWALKtex", 5, 60, 62 });
+	texGraphics->AddAnimationSet("IDLE", "Enemy", AnimationData{ "EIDLEtex", 5});
+	texGraphics->AddAnimationSet("WALK", "Enemy", AnimationData{ "EWALKtex", 5});
 }
 
 void Enemy::move()

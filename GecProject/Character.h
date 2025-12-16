@@ -19,9 +19,7 @@ public:
 		Attack
 	};
 
-	
 	virtual void initGraphics(Graphics* graphics);
-
 	void takeDamage(int damage);
 	bool CheckCollision(Character& other);
 
@@ -37,7 +35,6 @@ protected:
 	Graphics* texGraphics = nullptr;
 	Movement currentState = Idle;
 	
-
 	//these dont do anything yet :/
 	int health = 100;
 };

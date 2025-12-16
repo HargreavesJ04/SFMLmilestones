@@ -33,6 +33,7 @@ void Player::move()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
 	{
+
 		currentState = Attack;
 	}
 
@@ -52,11 +53,11 @@ void Player::initGraphics(Graphics* texGraphics)
 {
 	Character::initGraphics(texGraphics);
 
-	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex",  5, 60, 62 });
-	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 8,  432, 521 });
-	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 5,  60, 62 });
-	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 5,  60, 62 });
-	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5,  60, 62 });
+	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex",5});
+	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 8});
+	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 5});
+	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 5});
+	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5});
 }
 
 std::string Player::setAnimationName(Movement state)
