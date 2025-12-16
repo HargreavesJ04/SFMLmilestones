@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "graphics.h"
 #include "Collision.h"
+#include "Audio.h"
 
 
 class Character : public Entity
@@ -20,6 +21,8 @@ public:
 	};
 
 	virtual void initGraphics(Graphics* graphics);
+	virtual void initAudio(Audio* audio);
+
 	void takeDamage(int damage);
 	bool CheckCollision(Character& other);
 
@@ -33,6 +36,7 @@ protected:
 
 	Collision box{{position,size} };
 	Graphics* texGraphics = nullptr;
+	Audio* sfxaudio = nullptr;
 	Movement currentState = Idle;
 	
 	//these dont do anything yet :/

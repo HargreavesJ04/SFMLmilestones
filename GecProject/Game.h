@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "level.h" 
+#include "Audio.h"
 
 
 class Game
@@ -18,7 +19,8 @@ public:
     void render();          
     void run();       
     void initGraphics();
-    
+    void initAudio();
+
 private:
     void initWindow();       
     
@@ -30,7 +32,7 @@ private:
     sf::Time time = sf::milliseconds(50);
 
     Graphics* loadtex = new Graphics();
-
+    Audio* audio = new Audio();
 	
     sf::Music music;
 	Player Alucard;

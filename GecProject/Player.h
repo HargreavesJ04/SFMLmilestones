@@ -6,10 +6,11 @@ public:
 
 	void move();
 	void initGraphics(Graphics* texGraphics) override; 
+	void initAudio(Audio* audio) override;
 
 private:
 
 	
-	std::string setAnimationName(Movement state);
+	std::string setState(Movement state);
 };
 

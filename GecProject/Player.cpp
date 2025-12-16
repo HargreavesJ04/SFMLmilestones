@@ -4,6 +4,7 @@ void Player::move()
 {
 	if (health <= 0)
 	{
+		
 		position = { -10000.f, -10000.f };
 		box.Move(position);
 		return;
@@ -18,6 +19,7 @@ void Player::move()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 	{
+		
 		position.y += yspeed;
 		currentState = Crouch;
 	}
@@ -33,7 +35,7 @@ void Player::move()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
 	{
-
+	
 		currentState = Attack;
 	}
 
@@ -41,7 +43,7 @@ void Player::move()
 
 	if (texGraphics) 
 	{
-		std::string animName = setAnimationName(currentState);
+		std::string animName = setState(currentState);
 		texGraphics->RenderSprite("Player", position, animName, 0);
 	}
 }
@@ -60,7 +62,18 @@ void Player::initGraphics(Graphics* texGraphics)
 	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5});
 }
 
-std::string Player::setAnimationName(Movement state)
+void Player::initAudio(Audio* audio)
+{
+	Character::initAudio(audio);
+
+	audio->LoadSound("ATTACK", "Data/Audio/sfx/Alucard/cutt.wav");
+	audio->LoadSound("WALK", "Data/Audio/sfx/Alucard/alu_agh.wav");
+	audio->LoadSound("HURT", "Data/Audio/sfx/Alucard/alu_agh.wav");
+
+
+}
+
+std::string Player::setState(Movement state)
 {
 	switch (state)
 	{

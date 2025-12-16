@@ -6,16 +6,13 @@
 Game::Game()
 {
 
-    if (music.openFromFile("Data/Audio/Vampire-Killer.wav"))
-    {
-        music.setVolume(50); 
-        music.setLooping(true); 
-        music.play();
-    }
-
+ 
+    
     initWindow();
 	initGraphics();
+	initAudio();
 	Alucard.initGraphics(loadtex);
+    Alucard.initAudio(audio);
 	enemy.initGraphics(loadtex);
 }
 
@@ -23,6 +20,7 @@ Game::~Game()
 {
     delete this->window;
     delete this->loadtex;
+	delete this->audio;
 }
 
 void Game::UpdateDt()
@@ -53,6 +51,7 @@ void Game::render()
 
     if (Alucard.CheckCollision(enemy))
     {
+		audio->PlaySound("HIT");
         std::cout << "Collision Detected!" << std::endl;
 		Alucard.takeDamage(1);
 
@@ -94,6 +93,14 @@ void Game::initGraphics()
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EWALKtex");
 	
 	loadtex->createSprite("Enemy");
+}
+
+void Game::initAudio()
+{
+	audio->LoadSound("HIT", "Data/Audio/sfx/Alucard/alu_aah.wav");
+
+    audio->PlayMusic("Data/Audio/Vampire-Killer.wav");
+    audio->SetMusicVolume(50.f);
 }
 
 void Game::initWindow()

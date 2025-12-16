@@ -6,6 +6,11 @@ void Character::initGraphics(Graphics* graphics)
 	texGraphics = graphics;
 }
 
+void Character::initAudio(Audio* audio)
+{
+	sfxaudio = audio;
+}
+
 void Character::takeDamage(int damage)
 {
 
