@@ -44,10 +44,11 @@ void Game::updateEvents()
 void Game::render()
 {
     this->window->clear();
+    this->window->draw(test);
 
     loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
 
-	Alucard.update(deltaTime);
+	Alucard.update(deltaTime, levelData);
 	enemy.move();
 
     if (Alucard.CheckCollision(enemy))
@@ -62,8 +63,6 @@ void Game::render()
 
     loadtex->Draw(*this->window);
    
-    
-
     this->window->display();
     sf::sleep(time);
 }
@@ -81,12 +80,11 @@ void Game::run()
 
 void Game::initGraphics()
 {
-    loadtex->loadTexture("Data/Textures/Tilesets/vertex-array-tilemap-tileset.png", "Tilesettex");
- 
-
-    loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex"); 
+    loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
     loadtex->createSprite("Level_Background");
     loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex",1 });
+
+    test.load("Data/Textures/Tilesets/vertex-array-tilemap-tileset.png", sf::Vector2u(32, 32), levelData, 16, 8);
 
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","IDLEtex");
     loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png","ATTACKtex");
@@ -105,12 +103,11 @@ void Game::initGraphics()
 void Game::initAudio()
 {
     audio->PlayMusic("Data/Audio/Vampire-Killer.wav");
-    audio->SetMusicVolume(50.f);
+    audio->SetMusicVolume(5.f);
 }
 
 void Game::initWindow()
 {
-    
-   
+
     this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }),  "GEC Start Project [Totally Not Catlevania]" );
 }

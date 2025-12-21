@@ -23,7 +23,7 @@ public:
 	void RenderSprite(const std::string& spriteName, sf::Vector2f pos, const std::string& spriteSetName, int frameNum);
 	void Draw(sf::RenderWindow& window);
 	
-
+	sf::Texture& getTexture(const std::string name);
 	std::unordered_map<std::string, Sprite2D*> m_spritemap;
 	std::unordered_map<std::string, sf::Texture*> m_texturemap;
 };

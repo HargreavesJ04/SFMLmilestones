@@ -107,3 +107,8 @@ void Graphics::Draw(sf::RenderWindow& window)
 		}
 	}
 }
+
+sf::Texture& Graphics::getTexture(std::string name)
+{
+	return *m_texturemap[name];
+}
