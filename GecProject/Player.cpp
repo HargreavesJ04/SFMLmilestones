@@ -4,12 +4,12 @@ void Player::move()
 {
 	if (health <= 0)
 	{
-		
 		position = { -10000.f, -10000.f };
 		box.Move(position);
+		currentState = Dead;
 		return;
 	}
-
+	Movement previousState = currentState;
 	currentState = Idle;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
@@ -41,11 +41,59 @@ void Player::move()
 
 	box.Move(position);
 
+	if (currentState != previousState)
+	{
+		
+		stopSound(setState(previousState));
+		std::string key = setState(currentState);
+
+		if (key == "WALK")
+		{
+			playSoundLooped(key);
+		}
+		else
+		{
+			playSound(key);
+		}
+	}
+
 	if (texGraphics) 
 	{
 		std::string animName = setState(currentState);
 		texGraphics->RenderSprite("Player", position, animName, 0);
 	}
+}
+
+void Player::update(float dt)
+{
+	if (Iframes > 0.0f)
+	{
+		Iframes -= dt;
+
+		int flicker = static_cast<int>(Iframes * 10);
+		if (flicker % 2 == 0)
+		{
+			texGraphics->SetSpriteColour("Player", sf::Color(255, 0, 0, 200));
+		}
+		else
+		{
+			texGraphics->SetSpriteColour("Player", sf::Color(255, 255, 255, 50));
+		}
+	}
+	else
+	{
+		texGraphics->SetSpriteColour("Player", sf::Color::White);
+	}
+
+	if (health <= 0)
+	{
+		position = { -10000.f, -10000.f };
+		box.Move(position);
+		currentState = Dead;
+		return;
+	}
+
+	move();
 }
 
 
@@ -68,9 +116,22 @@ void Player::initAudio(Audio* audio)
 
 	audio->LoadSound("ATTACK", "Data/Audio/sfx/Alucard/cutt.wav");
 	audio->LoadSound("WALK", "Data/Audio/sfx/Alucard/alu_agh.wav");
-	audio->LoadSound("HURT", "Data/Audio/sfx/Alucard/alu_agh.wav");
+	audio->LoadSound("HURT", "Data/Audio/sfx/Alucard/alu_aah.wav");
 
 
+}
+
+void Player::takeDamage(int damage)
+{
+	if (Iframes <= 0.0f)
+	{
+		health -= damage;
+		Iframes = 1.0f; 
+
+		playSound("HURT");
+
+		std::cout << "Hit Health: " << health << std::endl;
+	}
 }
 
 std::string Player::setState(Movement state)

@@ -19,6 +19,7 @@ public:
 
 	bool AddAnimationSet(const std:: string&  setName, const std::string& spriteName ,const AnimationData& setData );
 
+	void SetSpriteColour(const std::string& spriteName, const sf::Color& colour);
 	void RenderSprite(const std::string& spriteName, sf::Vector2f pos, const std::string& spriteSetName, int frameNum);
 	void Draw(sf::RenderWindow& window);
 	

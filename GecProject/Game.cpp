@@ -5,14 +5,13 @@
 
 Game::Game()
 {
-
- 
-    
     initWindow();
 	initGraphics();
 	initAudio();
+
 	Alucard.initGraphics(loadtex);
     Alucard.initAudio(audio);
+
 	enemy.initGraphics(loadtex);
 }
 
@@ -46,15 +45,14 @@ void Game::render()
 {
     this->window->clear();
 
-	Alucard.move();
+    loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
+
+	Alucard.update(deltaTime);
 	enemy.move();
 
     if (Alucard.CheckCollision(enemy))
     {
-		audio->PlaySound("HIT");
-        std::cout << "Collision Detected!" << std::endl;
-		Alucard.takeDamage(1);
-
+		Alucard.takeDamage(30);
     }
    
     sf::View view;
@@ -83,6 +81,11 @@ void Game::run()
 
 void Game::initGraphics()
 {
+
+    loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex"); 
+    loadtex->createSprite("Level_Background");
+    loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex",1 });
+
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","IDLEtex");
     loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png","ATTACKtex");
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","WALKtex");
@@ -93,12 +96,12 @@ void Game::initGraphics()
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EWALKtex");
 	
 	loadtex->createSprite("Enemy");
+
+	
 }
 
 void Game::initAudio()
 {
-	audio->LoadSound("HIT", "Data/Audio/sfx/Alucard/alu_aah.wav");
-
     audio->PlayMusic("Data/Audio/Vampire-Killer.wav");
     audio->SetMusicVolume(50.f);
 }

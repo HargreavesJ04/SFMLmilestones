@@ -17,14 +17,19 @@ public:
 		Left,
 		Right,
 		Falling,
-		Attack
+		Attack,
+		Dead
 	};
 
 	virtual void initGraphics(Graphics* graphics);
 	virtual void initAudio(Audio* audio);
 
-	void takeDamage(int damage);
+	virtual void takeDamage(int damage);
 	bool CheckCollision(Character& other);
+
+	void playSound(const std::string& name);
+	void playSoundLooped(const std::string& name);
+	void stopSound(const std::string& name);
 
 	bool moving = false;
 	bool movingBack = false;

@@ -15,8 +15,8 @@ public:
 
 
 	
-	void loadfromfile(std::string filepath); 
-
+	std::string* levelfile;
+	void loadfromfile(std::string filepath);
 
 	
 

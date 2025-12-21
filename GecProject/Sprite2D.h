@@ -14,7 +14,10 @@ struct AnimationSet
 class Sprite2D
 {
 public:
+
+	void SetColour(const sf::Color& color);
 	void AddAnimationSet(const std::string& name, const AnimationData& setData, sf::Texture* texture);
+
 	std::unordered_map<std::string, AnimationSet> m_animationData;
 	sf::Sprite* sprite = nullptr;
 

@@ -48,6 +48,14 @@ bool Graphics::AddAnimationSet(const std::string& setName, const std::string& sp
 	return false;
 }
 
+void Graphics::SetSpriteColour(const std::string& spriteName, const sf::Color& colour)
+{
+	if (m_spritemap.count(spriteName))
+	{
+		m_spritemap[spriteName]->SetColour(colour);
+	}
+}
+
 void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, const std::string& spriteSetName, int frameNum)
 {
 	if (m_spritemap.find(spriteName) == m_spritemap.end() || m_spritemap[spriteName]->m_animationData.find(spriteSetName) == m_spritemap[spriteName]->m_animationData.end())

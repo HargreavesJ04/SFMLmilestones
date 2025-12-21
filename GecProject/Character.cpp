@@ -25,5 +25,29 @@ bool Character::CheckCollision(Character& other)
 	return box.CheckCollision(otherRect);
 }
 
+void Character::playSound(const std::string& name)
+{
+	if (sfxaudio)
+	{
+		sfxaudio->PlaySound(name);
+	}
+}
+
+void Character::playSoundLooped(const std::string& name)
+{
+	if (sfxaudio)
+	{
+		sfxaudio->PlaySoundLooped(name);
+	}
+}
+
+void Character::stopSound(const std::string& name)
+{
+	if (sfxaudio)
+	{
+		sfxaudio->StopSound(name);
+	}
+}
+
 
 
