@@ -1,15 +1,39 @@
 #include "level.h"
-#include <fstream>
-#include <iostream>
 
-void level::loadfromfile(std::string filepath)
-{
-	std::ifstream TestFile;
-	TestFile.open(filepath);
-	if (!TestFile)
-	{
-		return;
-	}
+bool level::load(const sf::Texture& texture, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height) {
+    m_tileset = &texture;
+    m_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
+    m_vertices.resize(width * height * 6);
 
-	getline(TestFile, *levelfile);
+    for (unsigned int i = 0; i < width; ++i) {
+        for (unsigned int j = 0; j < height; ++j) {
+            int tileNumber = tiles[i + j * width];
+
+            int tu = tileNumber % (m_tileset->getSize().x / tileSize.x);
+            int tv = tileNumber / (m_tileset->getSize().x / tileSize.x);
+
+            sf::Vertex* triangles = &m_vertices[(i + j * width) * 6];
+
+            triangles[0].position = sf::Vector2f(i * (float)tileSize.x, j * (float)tileSize.y);
+            triangles[1].position = sf::Vector2f((i + 1) * (float)tileSize.x, j * (float)tileSize.y);
+            triangles[2].position = sf::Vector2f(i * (float)tileSize.x, (j + 1) * (float)tileSize.y);
+            triangles[3].position = sf::Vector2f(i * (float)tileSize.x, (j + 1) * (float)tileSize.y);
+            triangles[4].position = sf::Vector2f((i + 1) * (float)tileSize.x, j * (float)tileSize.y);
+            triangles[5].position = sf::Vector2f((i + 1) * (float)tileSize.x, (j + 1) * (float)tileSize.y);
+
+            triangles[0].texCoords = sf::Vector2f(tu * (float)tileSize.x, tv * (float)tileSize.y);
+            triangles[1].texCoords = sf::Vector2f((tu + 1) * (float)tileSize.x, tv * (float)tileSize.y);
+            triangles[2].texCoords = sf::Vector2f(tu * (float)tileSize.x, (tv + 1) * (float)tileSize.y);
+            triangles[3].texCoords = sf::Vector2f(tu * (float)tileSize.x, (tv + 1) * (float)tileSize.y);
+            triangles[4].texCoords = sf::Vector2f((tu + 1) * (float)tileSize.x, tv * (float)tileSize.y);
+            triangles[5].texCoords = sf::Vector2f((tu + 1) * (float)tileSize.x, (tv + 1) * (float)tileSize.y);
+        }
+    }
+    return true;
+}
+
+void level::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    states.transform *= getTransform();
+    states.texture = m_tileset;
+    target.draw(m_vertices, states);
 }

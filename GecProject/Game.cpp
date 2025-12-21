@@ -81,6 +81,8 @@ void Game::run()
 
 void Game::initGraphics()
 {
+    loadtex->loadTexture("Data/Textures/Tilesets/vertex-array-tilemap-tileset.png", "Tilesettex");
+ 
 
     loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex"); 
     loadtex->createSprite("Level_Background");
