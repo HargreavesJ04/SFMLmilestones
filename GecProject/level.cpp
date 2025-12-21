@@ -1,58 +1,35 @@
 #include "level.h"
 
-bool level::load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
+void level::load(const char map[8][17], float tileSize, Graphics* loadtex)
 {
-    if (!m_tileset.loadFromFile(tileset))
-        return false;
+    m_tiles.clear();
 
-    m_vertices.setPrimitiveType(sf::PrimitiveType::Triangles);
-    m_vertices.resize(width * height * 6);
-
-    for (unsigned int i = 0; i < width; ++i)
+    for (int y = 0; y < 8; y++)
     {
-        for (unsigned int j = 0; j < height; ++j)
+        for (int x = 0; x < 16; x++)
         {
-            int tileNumber = tiles[i + j * width];
+            if (map[y][x] == '#')
+            {
+                sf::RectangleShape tile;
+                tile.setSize({ tileSize, tileSize });
+                tile.setPosition({ x * tileSize, y * tileSize });
+                tile.setTexture(&loadtex->getTexture("Tileset"));
 
-            int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
-            int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
-
-            sf::Vertex* triangles = &m_vertices[(i + j * width) * 6];
-
-            triangles[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
-            triangles[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
-            triangles[2].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
-            triangles[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
-            triangles[4].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
-            triangles[5].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
-
-            triangles[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-            triangles[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-            triangles[2].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
-            triangles[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
-            triangles[4].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-            triangles[5].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
+                m_tiles.push_back(tile);
+            }
         }
     }
-    return true;
 }
 
-void level::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void level::draw(sf::RenderWindow& window)
 {
-	states.transform *= getTransform();
-	states.texture = &m_tileset;
-	target.draw(m_vertices, states);
-}
-
-void level::loadfromfile(std::string filepath)
-{
-    std::ifstream TestFile;
-    TestFile.open(filepath);
-    if (!TestFile)
+    for (auto& tile : m_tiles)
     {
-        return;
+        window.draw(tile);
     }
+}
 
-    getline(TestFile, *levelfile);
-
+const std::vector<sf::RectangleShape>& level::getTiles() const
+{
+    return m_tiles;
 }

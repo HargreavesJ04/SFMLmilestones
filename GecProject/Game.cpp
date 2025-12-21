@@ -44,11 +44,11 @@ void Game::updateEvents()
 void Game::render()
 {
     this->window->clear();
-    this->window->draw(test);
+    
 
     loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
 
-	Alucard.update(deltaTime, levelData);
+	Alucard.update(deltaTime);
 	enemy.move();
 
     if (Alucard.CheckCollision(enemy))
@@ -62,7 +62,8 @@ void Game::render()
     this->window->setView(view);
 
     loadtex->Draw(*this->window);
-   
+    test.draw(*this->window);
+
     this->window->display();
     sf::sleep(time);
 }
@@ -80,25 +81,25 @@ void Game::run()
 
 void Game::initGraphics()
 {
+    loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
+    test.load(charMap, 32.f, loadtex);
+
     loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
     loadtex->createSprite("Level_Background");
-    loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex",1 });
+    loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex", 1 });
 
-    test.load("Data/Textures/Tilesets/vertex-array-tilemap-tileset.png", sf::Vector2u(32, 32), levelData, 16, 8);
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex");
+    loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png", "ATTACKtex");
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "WALKtex");
+    loadtex->createSprite("Player");
 
-    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","IDLEtex");
-    loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png","ATTACKtex");
-    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","WALKtex");
-	
-	loadtex->createSprite("Player");
-
-    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EIDLEtex");
-    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png","EWALKtex");
-	
-	loadtex->createSprite("Enemy");
-
-	
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EIDLEtex");
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex");
+    loadtex->createSprite("Enemy");
 }
+
+	
+
 
 void Game::initAudio()
 {

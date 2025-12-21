@@ -64,7 +64,7 @@ void Player::move()
 	}
 }
 
-void Player::update(float dt, const int* levelData)
+void Player::update(float dt)
 {
 	if (Iframes > 0.0f)
 	{
@@ -132,31 +132,6 @@ void Player::takeDamage(int damage)
 
 		std::cout << "Hit Health: " << health << std::endl;
 	}
-}
-
-bool Player::checkLevelCollision(const int* tiles, unsigned int width, unsigned int height, sf::Vector2u tileSize)
-{
-	int leftTile = (int)(position.x / tileSize.x);
-	int rightTile = (int)((position.x + size.x) / tileSize.x);
-	int topTile = (int)(position.y / tileSize.y);
-	int bottomTile = (int)((position.y + size.y) / tileSize.y);
-
-	if (leftTile < 0) leftTile = 0;
-	if (rightTile >= (int)width) rightTile = width - 1;
-	if (topTile < 0) topTile = 0;
-	if (bottomTile >= (int)height) bottomTile = height - 1;
-
-	for (int i = leftTile; i <= rightTile; ++i)
-	{
-		for (int j = topTile; j <= bottomTile; ++j)
-		{
-			if (tiles[i + j * width] > 0)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 std::string Player::setState(Movement state)

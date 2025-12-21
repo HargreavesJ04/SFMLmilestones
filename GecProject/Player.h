@@ -5,11 +5,10 @@ class Player : public Character
 public: 
 
 	void move();
-	void update(float dt, const int* levelData);
+	void update(float dt);
 	void initGraphics(Graphics* texGraphics) override; 
 	void initAudio(Audio* audio) override;
 	void takeDamage(int damage) override;
-	bool checkLevelCollision(const int* tiles, unsigned int width, unsigned int height, sf::Vector2u tileSize);
 
 private:
 
