@@ -45,24 +45,28 @@ void Game::render()
 {
     this->window->clear();
     
+    
+    
 
-    loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
-
-	Alucard.update(deltaTime);
+	Alucard.update(deltaTime, test);
 	enemy.move();
 
     if (Alucard.CheckCollision(enemy))
     {
 		Alucard.takeDamage(30);
     }
+
+
    
     sf::View view;
     view.setSize({ 400.f, 300.f });
     view.setCenter(Alucard.position);
     this->window->setView(view);
 
+    
     loadtex->Draw(*this->window);
     test.draw(*this->window);
+    loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
 
     this->window->display();
     sf::sleep(time);
@@ -82,6 +86,7 @@ void Game::run()
 void Game::initGraphics()
 {
     loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
+    loadtex->loadTexture("Data/Textures/Tilesets/dirt2.png", "Tilesetbg");
     test.load(charMap, 32.f, loadtex);
 
     loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
@@ -89,7 +94,7 @@ void Game::initGraphics()
     loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex", 1 });
 
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex");
-    loadtex->loadTexture("Data/Textures/MaleZombie/attack_combined.png", "ATTACKtex");
+    loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "ATTACKtex");
     loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "WALKtex");
     loadtex->createSprite("Player");
 

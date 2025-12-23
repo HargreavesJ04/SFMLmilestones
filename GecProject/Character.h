@@ -35,7 +35,7 @@ public:
 	bool movingBack = false;
 	bool airborne;
 	float xspeed = 5.f;
-	float yspeed = 10.f;
+	float yspeed = 5.f;
 	
 protected:
 

@@ -22,3 +22,8 @@ bool Collision::CheckCollision(sf::FloatRect OtherActor)
 
     return false;
 }
+
+std::optional<sf::FloatRect> Collision::GetIntersection(sf::FloatRect OtherActor)
+{
+    return collider.findIntersection(OtherActor);
+}

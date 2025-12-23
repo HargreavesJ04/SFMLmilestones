@@ -94,10 +94,7 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 	
 }
 
-
-
-
-void Graphics::Draw(sf::RenderWindow& window)
+void Graphics::Draw(sf::RenderWindow& window) 
 {
 	for (auto& i : m_spritemap)
 	{
@@ -108,7 +105,7 @@ void Graphics::Draw(sf::RenderWindow& window)
 	}
 }
 
-sf::Texture& Graphics::getTexture(std::string name)
+sf::Texture& Graphics::getTexture(std::string name) //just to load a single texture and not the whole map great for tilesets
 {
 	return *m_texturemap[name];
 }

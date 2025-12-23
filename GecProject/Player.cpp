@@ -14,14 +14,14 @@ void Player::move()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 	{
-		position.y -= yspeed;
+		position.y -= yspeed * 5;
 		currentState = Jump;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 	{
 		
-		position.y += yspeed;
-		currentState = Crouch;
+		/*position.y += yspeed;
+		currentState = Crouch;*/
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
@@ -64,8 +64,41 @@ void Player::move()
 	}
 }
 
-void Player::update(float dt)
+void Player::update(float dt, const level& map)
 {
+
+	for (const auto& tile : map.getTiles())
+	{
+		auto intersect = box.GetIntersection(tile.getGlobalBounds());
+
+		if (intersect.has_value())
+		{
+			if (intersect->size.y < intersect->size.x)
+			{
+				if (position.y < tile.getPosition().y)
+				{
+					position.y -= intersect->size.y;
+				}
+				else
+				{
+					position.y += intersect->size.y;
+				}
+			}
+			else
+			{
+				if (position.x < tile.getPosition().x)
+				{
+					position.x -= intersect->size.x;
+				}
+				else
+				{
+					position.x += intersect->size.x;
+				}
+			}
+			box.Move(position);
+		}
+	}
+
 	if (Iframes > 0.0f)
 	{
 		Iframes -= dt;
@@ -92,6 +125,8 @@ void Player::update(float dt)
 		currentState = Dead;
 		return;
 	}
+
+	position.y += yspeed * gravity; //messy gravity implementation
 
 	move();
 }

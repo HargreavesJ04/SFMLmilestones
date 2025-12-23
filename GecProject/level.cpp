@@ -17,6 +17,16 @@ void level::load(const char map[8][17], float tileSize, Graphics* loadtex)
 
                 m_tiles.push_back(tile);
             }
+
+            if (map[y][x] == '.')
+            {
+                sf::RectangleShape bgtile;
+                bgtile.setSize({ tileSize, tileSize });
+                bgtile.setPosition({ x * tileSize, y * tileSize });
+                bgtile.setTexture(&loadtex->getTexture("Tilesetbg"));
+
+                m_tiles.push_back(bgtile);
+            }
         }
     }
 }
