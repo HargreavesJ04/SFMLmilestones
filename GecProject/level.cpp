@@ -1,8 +1,12 @@
 #include "level.h"
 
-void level::load(const char map[8][17], float tileSize, Graphics* loadtex)
+void level::load(const char map[8][17], float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio)
 {
-    m_tiles.clear();
+    tiles.clear();
+	bgtiles.clear();
+	bgSpriteName = bgName;
+
+	audio->PlayMusic(musicName);
 
     for (int y = 0; y < 8; y++)
     {
@@ -15,7 +19,7 @@ void level::load(const char map[8][17], float tileSize, Graphics* loadtex)
                 tile.setPosition({ x * tileSize, y * tileSize });
                 tile.setTexture(&loadtex->getTexture("Tileset"));
 
-                m_tiles.push_back(tile);
+                tiles.push_back(tile);
             }
 
             if (map[y][x] == '.')
@@ -25,21 +29,28 @@ void level::load(const char map[8][17], float tileSize, Graphics* loadtex)
                 bgtile.setPosition({ x * tileSize, y * tileSize });
                 bgtile.setTexture(&loadtex->getTexture("Tilesetbg"));
 
-                m_tiles.push_back(bgtile);
+                bgtiles.push_back(bgtile);
             }
         }
     }
 }
 
-void level::draw(sf::RenderWindow& window)
+void level::draw(sf::RenderWindow& window, Graphics* loadtex)
 {
-    for (auto& tile : m_tiles)
+    loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
+    for (auto& bgtile : bgtiles)
+    {
+        window.draw(bgtile);
+    }
+    for (auto& tile : tiles)
     {
         window.draw(tile);
     }
+    
+   
 }
 
 const std::vector<sf::RectangleShape>& level::getTiles() const
 {
-    return m_tiles;
+    return tiles;
 }

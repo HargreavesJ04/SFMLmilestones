@@ -14,6 +14,7 @@ public:
 
 private:
 
+	bool grounded = false;
 	float gravity = 1.0f;
 	float deltaTime = 0.f;
 	float lastFrame = deltaTime - 10.f;

@@ -28,8 +28,6 @@ void Game::UpdateDt()
 
 }
 
-
-
 void Game::updateEvents()
 {
     
@@ -45,9 +43,6 @@ void Game::render()
 {
     this->window->clear();
     
-    
-    
-
 	Alucard.update(deltaTime, test);
 	enemy.move();
 
@@ -56,17 +51,14 @@ void Game::render()
 		Alucard.takeDamage(30);
     }
 
-
-   
     sf::View view;
     view.setSize({ 400.f, 300.f });
     view.setCenter(Alucard.position);
     this->window->setView(view);
 
-    
+    test.draw(*this->window, loadtex);
     loadtex->Draw(*this->window);
-    test.draw(*this->window);
-    loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
+   
 
     this->window->display();
     sf::sleep(time);
@@ -87,7 +79,8 @@ void Game::initGraphics()
 {
     loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
     loadtex->loadTexture("Data/Textures/Tilesets/dirt2.png", "Tilesetbg");
-    test.load(charMap, 32.f, loadtex);
+    //test level
+	test.load(charMap, 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio);
 
     loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
     loadtex->createSprite("Level_Background");
@@ -108,8 +101,7 @@ void Game::initGraphics()
 
 void Game::initAudio()
 {
-    audio->PlayMusic("Data/Audio/Vampire-Killer.wav");
-    audio->SetMusicVolume(5.f);
+    audio->SetMusicVolume(15.f);
 }
 
 void Game::initWindow()

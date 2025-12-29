@@ -2,19 +2,13 @@
 
 void Player::move()
 {
-	if (health <= 0)
-	{
-		position = { -10000.f, -10000.f };
-		box.Move(position);
-		currentState = Dead;
-		return;
-	}
 	Movement previousState = currentState;
 	currentState = Idle;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && grounded)
 	{
-		position.y -= yspeed * 5;
+		grounded = false;
+		position.y -= yspeed * 12;
 		currentState = Jump;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
@@ -66,25 +60,15 @@ void Player::move()
 
 void Player::update(float dt, const level& map)
 {
+	move();
+	box.Move(position);
 
 	for (const auto& tile : map.getTiles())
 	{
 		auto intersect = box.GetIntersection(tile.getGlobalBounds());
-
 		if (intersect.has_value())
 		{
-			if (intersect->size.y < intersect->size.x)
-			{
-				if (position.y < tile.getPosition().y)
-				{
-					position.y -= intersect->size.y;
-				}
-				else
-				{
-					position.y += intersect->size.y;
-				}
-			}
-			else
+			if (intersect->size.x < intersect->size.y)
 			{
 				if (position.x < tile.getPosition().x)
 				{
@@ -94,15 +78,38 @@ void Player::update(float dt, const level& map)
 				{
 					position.x += intersect->size.x;
 				}
+				box.Move(position);
 			}
-			box.Move(position);
+		}
+	}
+
+	position.y += yspeed * gravity;
+	box.Move(position);
+
+	for (const auto& tile : map.getTiles())
+	{
+		auto intersect = box.GetIntersection(tile.getGlobalBounds());
+		if (intersect.has_value())
+		{
+			if (intersect->size.y <= intersect->size.x)
+			{
+				if (position.y < tile.getPosition().y)
+				{
+					position.y -= intersect->size.y;
+					grounded = true;
+				}
+				else
+				{
+					position.y += intersect->size.y;
+				}
+				box.Move(position);
+			}
 		}
 	}
 
 	if (Iframes > 0.0f)
 	{
 		Iframes -= dt;
-
 		int flicker = static_cast<int>(Iframes * 10);
 		if (flicker % 2 == 0)
 		{
@@ -125,14 +132,7 @@ void Player::update(float dt, const level& map)
 		currentState = Dead;
 		return;
 	}
-
-	position.y += yspeed * gravity; //messy gravity implementation
-
-	move();
 }
-
-
-
 
 void Player::initGraphics(Graphics* texGraphics)
 {
