@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "level.h" 
 #include "Audio.h"
+#include "HUD.h"
 
 
 class Game
@@ -35,6 +36,7 @@ private:
     sf::Music music;
 	Player Alucard;
 	Enemy enemy;
+    HUD* playerHUD;
 
     level test;
     const char charMap[8][17] = {

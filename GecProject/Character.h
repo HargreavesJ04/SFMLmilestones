@@ -36,7 +36,7 @@ public:
 	bool airborne;
 	float xspeed = 5.f;
 	float yspeed = 5.f;
-	
+	int health = 100;
 protected:
 
 	Collision box{{position,size} };
@@ -45,6 +45,6 @@ protected:
 	Movement currentState = Idle;
 	
 	//these dont do anything yet :/
-	int health = 100;
+//	int health = 100;
 };
 

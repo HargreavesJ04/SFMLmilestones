@@ -1,5 +1,6 @@
 #include "Player.h"
 
+
 void Player::move()
 {
 	Movement previousState = currentState;

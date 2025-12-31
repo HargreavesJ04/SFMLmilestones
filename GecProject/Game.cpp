@@ -9,10 +9,12 @@ Game::Game()
 	initGraphics();
 	initAudio();
 
+	playerHUD = new HUD();
+
 	Alucard.initGraphics(loadtex);
     Alucard.initAudio(audio);
 
-	enemy.initGraphics(loadtex);
+    enemy.initGraphics(loadtex);
 }
 
 Game::~Game()
@@ -20,6 +22,7 @@ Game::~Game()
     delete this->window;
     delete this->loadtex;
 	delete this->audio;
+    delete this->playerHUD;
 }
 
 void Game::UpdateDt()
@@ -39,26 +42,36 @@ void Game::updateEvents()
     }
 }
 
-void Game::render()
-{
+void Game::render() {
     this->window->clear();
-    
-	Alucard.update(deltaTime, test);
-	enemy.move();
 
-    if (Alucard.CheckCollision(enemy))
-    {
-		Alucard.takeDamage(30);
+    Alucard.update(deltaTime, test);
+    enemy.move();
+
+    if (Alucard.CheckCollision(enemy)) {
+        Alucard.takeDamage(30);
     }
 
-    sf::View view;
-    view.setSize({ 400.f, 300.f });
-    view.setCenter(Alucard.position);
-    this->window->setView(view);
+    sf::View mainView;
+    mainView.setSize({ 400.f, 300.f });
+    mainView.setCenter(Alucard.position);
+    this->window->setView(mainView);
 
     test.draw(*this->window, loadtex);
     loadtex->Draw(*this->window);
-   
+
+    test.miniView.setCenter({ 256.f, 128.f });
+    this->window->setView(test.miniView);
+
+    test.draw(*this->window, loadtex);
+    loadtex->Draw(*this->window);
+
+    this->window->setView(this->window->getDefaultView());
+
+    //this->window->draw(*test.miniMapFrame);
+
+    playerHUD->update(Alucard.health, 200);
+    playerHUD->draw(*this->window);
 
     this->window->display();
     sf::sleep(time);
