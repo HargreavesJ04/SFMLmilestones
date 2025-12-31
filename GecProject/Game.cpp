@@ -45,7 +45,7 @@ void Game::updateEvents()
 void Game::render() {
 	this->window->clear();
 
-	Alucard.update(deltaTime, test);
+	Alucard.update(deltaTime, test, enemies);
 
 	for (auto const& [name, e] : enemies)
 	{
@@ -65,7 +65,7 @@ void Game::render() {
 	test.draw(*this->window, loadtex);
 	loadtex->Draw(*this->window);
 
-	test.miniView.setCenter({ 256.f, 128.f });
+	test.miniView.setCenter(Alucard.position);
 	this->window->setView(test.miniView);
 
 	test.draw(*this->window, loadtex);

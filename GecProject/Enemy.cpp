@@ -11,6 +11,16 @@ void Enemy::move(float dt, const level& map)
 	currentState = Idle;
 	box.Move(position);
 
+	if (damageFlashTimer > 0.0f)
+	{
+		damageFlashTimer -= dt;
+		texGraphics->SetSpriteColour(spriteID, sf::Color::Red);
+	}
+	else
+	{
+		texGraphics->SetSpriteColour(spriteID, sf::Color::White);
+	}
+
 	if (texGraphics)
 	{
 		std::string animName = setAnimationName(currentState);
@@ -20,11 +30,16 @@ void Enemy::move(float dt, const level& map)
 
 void Enemy::takeDamage(int damage)
 {
-	health -= damage;
-	if (health <= 0)
+	if (damageFlashTimer <= 0.0f)
 	{
-		position = { -5000.f, -5000.f };
-		box.Move(position);
+		health -= damage;
+		damageFlashTimer = 0.2f;
+
+		if (health <= 0)
+		{
+			position = { -5000.f, -5000.f };
+			box.Move(position);
+		}
 	}
 }
 

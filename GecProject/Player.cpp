@@ -1,7 +1,8 @@
 #include "Player.h"
+#include "Enemy.h"
 
 
-void Player::move()
+void Player::move(float dt)
 {
 	Movement previousState = currentState;
 	currentState = Idle;
@@ -12,25 +13,30 @@ void Player::move()
 		position.y -= yspeed * 16;
 		currentState = Jump;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-	{
-		
-		/*position.y += yspeed;
-		currentState = Crouch;*/
-	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		position.x -= xspeed;
 		currentState = Left;
+		faceDir = -1;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		position.x += xspeed;
 		currentState = Right;
+		faceDir = 1;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F))
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isAttacking)
 	{
-	
+		isAttacking = true;
+		attackTimer = 0.4f;
+		currentState = Attack;
+	}
+
+	if (isAttacking)
+	{
 		currentState = Attack;
 	}
 
@@ -38,7 +44,6 @@ void Player::move()
 
 	if (currentState != previousState)
 	{
-		
 		stopSound(setState(previousState));
 		std::string key = setState(currentState);
 
@@ -52,16 +57,46 @@ void Player::move()
 		}
 	}
 
-	if (texGraphics) 
+	if (texGraphics)
 	{
 		std::string animName = setState(currentState);
 		texGraphics->RenderSprite("Player", position, animName, 0);
 	}
 }
 
-void Player::update(float dt, const level& map)
+void Player::update(float dt, const level& map, std::unordered_map<std::string, Enemy*>& enemies)
 {
-	move();
+	move(dt);
+
+	if (isAttacking)
+	{
+		attackTimer -= dt;
+		if (attackTimer <= 0.0f)
+		{
+			isAttacking = false;
+		}
+
+		sf::FloatRect attackHitbox;
+		float range = 40.0f;
+
+		if (faceDir == 1)
+		{
+			attackHitbox = sf::FloatRect({ position.x + size.x, position.y }, { range, size.y });
+		}
+		else
+		{
+			attackHitbox = sf::FloatRect({ position.x - range, position.y }, { range, size.y });
+		}
+
+		for (auto const& [name, enemy] : enemies)
+		{
+			if (attackHitbox.findIntersection(enemy->box.GetBox()))
+			{
+				enemy->takeDamage(20);
+			}
+		}
+	}
+
 	box.Move(position);
 
 	for (const auto& tile : map.getTiles())
@@ -139,11 +174,11 @@ void Player::initGraphics(Graphics* texGraphics)
 {
 	Character::initGraphics(texGraphics);
 
-	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex",5});
-	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 8});
-	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 5});
-	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 5});
-	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5});
+	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex",5 });
+	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 8 });
+	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 5 });
+	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 5 });
+	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5 });
 }
 
 void Player::initAudio(Audio* audio)
@@ -162,7 +197,7 @@ void Player::takeDamage(int damage)
 	if (Iframes <= 0.0f)
 	{
 		health -= damage;
-		Iframes = 1.0f; 
+		Iframes = 1.0f;
 
 		playSound("HURT");
 
@@ -176,13 +211,13 @@ std::string Player::setState(Movement state)
 	{
 	case Movement::Left:
 	case Movement::Right:
-		return "WALK"; 
+		return "WALK";
 	case Movement::Jump:
 		return "JUMP";
 	case Movement::Attack:
 		return "ATTACK";
 	case Movement::Crouch:
-		return "CROUCH"; 
+		return "CROUCH";
 	default:
 		return "IDLE";
 	}
