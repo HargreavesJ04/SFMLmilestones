@@ -9,7 +9,7 @@ void Player::move()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && grounded)
 	{
 		grounded = false;
-		position.y -= yspeed * 12;
+		position.y -= yspeed * 16;
 		currentState = Jump;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))

@@ -15,10 +15,19 @@ Game::Game()
     Alucard.initAudio(audio);
 
     enemy.initGraphics(loadtex);
+
+    Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
 }
 
 Game::~Game()
 {
+
+    for (auto& pair : enemies) 
+    {
+        delete pair.second;
+	}
+	enemies.clear();
+
     delete this->window;
     delete this->loadtex;
 	delete this->audio;
@@ -46,11 +55,17 @@ void Game::render() {
     this->window->clear();
 
     Alucard.update(deltaTime, test);
-    enemy.move();
+   
+    for (auto const& [name, e] : enemies)
+    {
+        e->move();
 
-    if (Alucard.CheckCollision(enemy)) {
-        Alucard.takeDamage(30);
+        if (Alucard.CheckCollision(*e))
+        {
+            Alucard.takeDamage(30);
+        }
     }
+    
 
     sf::View mainView;
     mainView.setSize({ 400.f, 300.f });
@@ -93,7 +108,7 @@ void Game::initGraphics()
     loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
     loadtex->loadTexture("Data/Textures/Tilesets/dirt2.png", "Tilesetbg");
     //test level
-	test.load(charMap, 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio);
+	
 
     loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
     loadtex->createSprite("Level_Background");

@@ -13,53 +13,77 @@ level::~level()
     }
 }
 
-void level::load(const char map[8][17], float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio)
+sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap)
 {
     tiles.clear();
 	bgtiles.clear();
+	enemyMap.clear();
 	bgSpriteName = bgName;
+
+	sf::Vector2f playerStartPos({ 0.f, 0.f }); 
+	int enemyCount = 0;
 
     miniView.setSize({ 800.f, 600.f });
     miniView.setViewport(sf::FloatRect({ 0.75f, 0.f }, { 0.25f, 0.25f }));
 
     loadtex->loadTexture("Data/UI/sora.png", "MiniMap");
 
-   /* if (miniMapFrame == nullptr)
+    if (miniMapFrame == nullptr)
     {
         miniMapFrame = new sf::Sprite(loadtex->getTexture("MiniMap"));
     }
-    */
-    /*miniMapFrame->setPosition({ 600.f, 0.f });
-    miniMapFrame->setScale({ 0.1f, 0.1f });*/
+    
+    miniMapFrame->setPosition({ 600.f, 0.f });
+    miniMapFrame->setScale({ 0.1f, 0.1f });
 
 	audio->PlayMusic(musicName);
 
-    for (int y = 0; y < 8; y++)
-    {
-        for (int x = 0; x < 16; x++)
-        {
-            if (map[y][x] == '#')
-            {
-                sf::RectangleShape tile;
-                tile.setSize({ tileSize, tileSize });
-                tile.setPosition({ x * tileSize, y * tileSize });
-                tile.setTexture(&loadtex->getTexture("Tileset"));
+	std::ifstream file(fileName);
+    std::string line;
+	int row = 0;
 
-                tiles.push_back(tile);
-            }
+	while (std::getline(file, line))
+	{
+		for (int col = 0; col < (int)line.length(); col++)
+		{
+			float xPos = (float)col * tileSize;
+			float yPos = (float)row * tileSize;
 
-            if (map[y][x] == '.')
-            {
-                sf::RectangleShape bgtile;
-                bgtile.setSize({ tileSize, tileSize });
-                bgtile.setPosition({ x * tileSize, y * tileSize });
-                bgtile.setTexture(&loadtex->getTexture("Tilesetbg"));
+			if (line[col] == '#')
+			{
+				sf::RectangleShape tile;
+				tile.setSize({ tileSize, tileSize });
+				tile.setPosition({ (float)col * tileSize, (float)row * tileSize });
+				tile.setTexture(&loadtex->getTexture("Tileset"));
+				tiles.push_back(tile);
+			}
+			else if (line[col] == 'P')
+			{
+				playerStartPos = { xPos, yPos };
+			}
+			else if (line[col] == 'E')
+			{
+				std::string enemyName = "Enemy_" + std::to_string(enemyCount);
+				Enemy* newEnemy = new Enemy();
+				newEnemy->initGraphics(loadtex);
+				newEnemy->position = { xPos, yPos };
 
-                bgtiles.push_back(bgtile);
-            }
-        }
-    }
+				enemyMap[enemyName] = newEnemy;
+				enemyCount++;
+			}
+			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E')
+			{
+				sf::RectangleShape bgtile({ tileSize, tileSize });
+				bgtile.setPosition({ xPos, yPos });
+				bgtile.setTexture(&loadtex->getTexture("Tilesetbg"));
+				bgtiles.push_back(bgtile);
+			}
+		}
+		row++;
+	}
+	return playerStartPos;
 }
+
 
 void level::draw(sf::RenderWindow& window, Graphics* loadtex)
 {

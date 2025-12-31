@@ -3,7 +3,9 @@
 #include <string>
 #include "Graphics.h"
 #include "Audio.h"
+#include <fstream>
 #include "SFML/Graphics/View.hpp"
+#include "Enemy.h"
 
 
 class level
@@ -13,7 +15,7 @@ public:
     level();
     ~level();
 
-    void load(const char map[8][17], float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio);
+    sf::Vector2f load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap);
     void draw(sf::RenderWindow& window, Graphics* loadtex);
     const std::vector<sf::RectangleShape>& getTiles() const;
 

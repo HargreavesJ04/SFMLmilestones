@@ -33,22 +33,15 @@ private:
     Graphics* loadtex = new Graphics();
     Audio* audio = new Audio();
 	
+    std::unordered_map<std::string, Enemy*> enemies;
     sf::Music music;
 	Player Alucard;
 	Enemy enemy;
     HUD* playerHUD;
 
     level test;
-    const char charMap[8][17] = {
-        "################",
-        "#..............#",
-        "#..............#",
-        "#..............#",
-        "#..............#",
-        "###............#",
-        "################",
-        "################"
-    };
+    
+    
 };
 
 

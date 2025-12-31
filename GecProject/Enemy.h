@@ -4,9 +4,10 @@ class Enemy : public Character
 {
 public:
 
+	std::string spriteID;
 	void initGraphics(Graphics* texGraphics) override;
-	void move();
-
+	void move(float dt, const level& map);
+	void takeDamage(int damage) override;
 
 private:
 
