@@ -5,7 +5,9 @@
 #include "Audio.h"
 #include <fstream>
 #include "SFML/Graphics/View.hpp"
-#include "Enemy.h"
+#include <unordered_map>
+
+class Enemy;
 
 
 class level
