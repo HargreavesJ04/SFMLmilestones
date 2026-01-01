@@ -68,11 +68,17 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 				enemyCount++;
 			}
 
-			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E')
+			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E' || line[col] == 'W')
 			{
 				sf::RectangleShape bgtile({ tileSize, tileSize });
 				bgtile.setPosition({ xPos, yPos });
 				bgtile.setTexture(&loadtex->getTexture("Tilesetbg"));
+
+				if (line[col] == 'W')
+				{
+					bgtile.setFillColor(sf::Color(255, 255, 255, 254));
+				}
+
 				bgtiles.push_back(bgtile);
 			}
 		}
@@ -97,4 +103,20 @@ void level::draw(sf::RenderWindow& window, Graphics* loadtex)
 const std::vector<sf::RectangleShape>& level::getTiles() const
 {
 	return tiles;
+}
+
+bool level::checkWinCondition(sf::FloatRect playerBox)
+{
+	for (const auto& tile : bgtiles)
+	{
+		if (tile.getFillColor() == sf::Color(255, 255, 255, 254))
+		{
+			if (playerBox.findIntersection(tile.getGlobalBounds()))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 Game::Game()
 {
 	initWindow();
@@ -13,6 +14,7 @@ Game::Game()
 
 	Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
 }
+
 
 Game::~Game()
 {
@@ -28,10 +30,12 @@ Game::~Game()
 	delete this->playerHUD;
 }
 
+
 void Game::UpdateDt()
 {
 	this->deltaTime = this->dtClock.restart().asSeconds();
 }
+
 
 void Game::updateEvents()
 {
@@ -39,45 +43,67 @@ void Game::updateEvents()
 	{
 		if (sfEvent->is<sf::Event::Closed>())
 			this->window->close();
+
+		if (sfEvent->is<sf::Event::KeyPressed>())
+		{
+			auto key = sfEvent->getIf<sf::Event::KeyPressed>()->code;
+			manager.handleInput(key);
+		}
 	}
 }
 
-void Game::render() {
+
+void Game::render()
+{
 	this->window->clear();
 
-	Alucard.update(deltaTime, test, enemies);
-
-	for (auto const& [name, e] : enemies)
+	if (manager.shouldReset())
 	{
-		e->move(deltaTime, test);
-
-		if (Alucard.CheckCollision(*e))
-		{
-			Alucard.takeDamage(10);
-		}
+		Alucard.health = 100;
+		Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+		manager.clearResetFlag();
 	}
 
-	sf::View mainView;
-	mainView.setSize({ 400.f, 300.f });
-	mainView.setCenter(Alucard.position);
-	this->window->setView(mainView);
+	bool hitWinTile = test.checkWinCondition(Alucard.box.GetBox());
+	manager.update(Alucard.health, hitWinTile);
 
-	test.draw(*this->window, loadtex);
-	loadtex->Draw(*this->window);
+	if (manager.getState() == GameState::Playing)
+	{
+		Alucard.update(deltaTime, test, enemies);
 
-	test.miniView.setCenter(Alucard.position);
-	this->window->setView(test.miniView);
+		for (auto const& [name, e] : enemies)
+		{
+			e->move(deltaTime, test);
+			if (Alucard.CheckCollision(e->box.GetBox()))
+			{
+				Alucard.takeDamage(50);
+			}
+		}
 
-	test.draw(*this->window, loadtex);
-	loadtex->Draw(*this->window);
+		sf::View mainView;
+		mainView.setSize({ 400.f, 300.f });
+		mainView.setCenter(Alucard.position);
+		this->window->setView(mainView);
 
-	this->window->setView(this->window->getDefaultView());
+		test.draw(*this->window, loadtex);
+		loadtex->Draw(*this->window);
 
-	playerHUD->update(Alucard.health, 200);
-	playerHUD->draw(*this->window);
+		this->window->setView(this->window->getDefaultView());
+		playerHUD->update(Alucard.health, 100);
+		playerHUD->draw(*this->window);
+	}
+	else if (manager.getState() == GameState::GameOver)
+	{
+		this->window->setView(this->window->getDefaultView());
+	}
+	else if (manager.getState() == GameState::Win)
+	{
+		this->window->setView(this->window->getDefaultView());
+	}
 
 	this->window->display();
 }
+
 
 void Game::run()
 {
@@ -88,6 +114,7 @@ void Game::run()
 		this->render();
 	}
 }
+
 
 void Game::initGraphics()
 {
@@ -107,10 +134,12 @@ void Game::initGraphics()
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex");
 }
 
+
 void Game::initAudio()
 {
 	audio->SetMusicVolume(15.f);
 }
+
 
 void Game::initWindow()
 {

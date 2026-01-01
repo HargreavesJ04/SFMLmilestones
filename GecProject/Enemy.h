@@ -14,6 +14,7 @@ public:
 
 private:
 
+	int direction = 1;
 	std::string setAnimationName(Movement state);
 };
 

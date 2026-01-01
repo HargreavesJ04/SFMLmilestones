@@ -6,7 +6,7 @@ class Player : public Character
 {
 public:
 
-	void move(float dt);
+	void move();
 	void update(float dt, const level& map, std::unordered_map<std::string, class Enemy*>& enemies);
 	void initGraphics(Graphics* texGraphics) override;
 	void initAudio(Audio* audio) override;

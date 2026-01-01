@@ -26,6 +26,7 @@ public:
 
 	virtual void takeDamage(int damage);
 	bool CheckCollision(Character& other);
+	bool CheckCollision(sf::FloatRect rect);
 
 	void playSound(const std::string& name);
 	void playSoundLooped(const std::string& name);
@@ -42,7 +43,7 @@ public:
 	float attackTimer = 0.0f;
 	float damageFlashTimer = 0.0f;
 
-	Collision box{ {position,size} };
+	Collision box{ {position, {50.f, 52.f}} };
 
 protected:
 

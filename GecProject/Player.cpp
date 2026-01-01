@@ -2,7 +2,7 @@
 #include "Enemy.h"
 
 
-void Player::move(float dt)
+void Player::move()
 {
 	Movement previousState = currentState;
 	currentState = Idle;
@@ -13,21 +13,28 @@ void Player::move(float dt)
 		position.y -= yspeed * 16;
 		currentState = Jump;
 	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		position.x -= xspeed;
 		currentState = Left;
 		faceDir = -1;
-	}
 
+		if (texGraphics)
+		{
+			texGraphics->SetSpriteFlip("Player", true);
+		}
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		position.x += xspeed;
 		currentState = Right;
 		faceDir = 1;
-	}
 
+		if (texGraphics)
+		{
+			texGraphics->SetSpriteFlip("Player", false);
+		}
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isAttacking)
 	{
 		isAttacking = true;
@@ -60,13 +67,17 @@ void Player::move(float dt)
 	if (texGraphics)
 	{
 		std::string animName = setState(currentState);
-		texGraphics->RenderSprite("Player", position, animName, 0);
+
+		// Align Alucard inside the 60x62 debug box
+		sf::Vector2f centerPos = { position.x + (50.f / 2.f), position.y + (52.f / 2.f) };
+		texGraphics->RenderSprite("Player", centerPos, animName, 0);
 	}
 }
 
 void Player::update(float dt, const level& map, std::unordered_map<std::string, Enemy*>& enemies)
 {
-	move(dt);
+	move();
+	box.Move(position);
 
 	if (isAttacking)
 	{
@@ -77,15 +88,15 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 
 		sf::FloatRect attackHitbox;
-		float range = 40.0f;
+		float range = 35.0f;
 
 		if (faceDir == 1)
 		{
-			attackHitbox = sf::FloatRect({ position.x + size.x, position.y }, { range, size.y });
+			attackHitbox = sf::FloatRect({ position.x + 60.f * 0.7f, position.y + 62.f * 0.2f }, { range, 62.f * 0.6f });
 		}
 		else
 		{
-			attackHitbox = sf::FloatRect({ position.x - range, position.y }, { range, size.y });
+			attackHitbox = sf::FloatRect({ position.x - range, position.y + 62.f * 0.2f }, { range, 62.f * 0.6f });
 		}
 
 		for (auto const& [name, enemy] : enemies)
@@ -96,8 +107,6 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 			}
 		}
 	}
-
-	box.Move(position);
 
 	for (const auto& tile : map.getTiles())
 	{
@@ -119,7 +128,7 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 	}
 
-	position.y += yspeed * gravity;
+	position.y += yspeed * 1.0f; // Gravity
 	box.Move(position);
 
 	for (const auto& tile : map.getTiles())

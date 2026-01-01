@@ -20,6 +20,7 @@ public:
     sf::Vector2f load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap);
     void draw(sf::RenderWindow& window, Graphics* loadtex);
     const std::vector<sf::RectangleShape>& getTiles() const;
+	bool checkWinCondition(sf::FloatRect playerBox);
 
     sf::View miniView;
     sf::Sprite* miniMapFrame = nullptr;

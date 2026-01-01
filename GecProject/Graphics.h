@@ -5,26 +5,22 @@
 #include "AnimationData.h"
 
 
-class Sprite2D; 
+class Sprite2D;
 
 class Graphics
 {
-private: 
-
-	
-
-public: 
-	bool loadTexture(const std::string& filename, const std::string& name); 
+public:
+	bool loadTexture(const std::string& filename, const std::string& name);
 	bool createSprite(const std::string& name);
 
-	bool AddAnimationSet(const std:: string&  setName, const std::string& spriteName ,const AnimationData& setData );
+	bool AddAnimationSet(const std::string& setName, const std::string& spriteName, const AnimationData& setData);
 
 	void SetSpriteColour(const std::string& spriteName, const sf::Color& colour);
+	void SetSpriteFlip(const std::string& spriteName, bool flip);
 	void RenderSprite(const std::string& spriteName, sf::Vector2f pos, const std::string& spriteSetName, int frameNum);
 	void Draw(sf::RenderWindow& window);
-	
+
 	sf::Texture& getTexture(const std::string name);
 	std::unordered_map<std::string, Sprite2D*> m_spritemap;
 	std::unordered_map<std::string, sf::Texture*> m_texturemap;
 };
-

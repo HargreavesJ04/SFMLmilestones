@@ -8,8 +8,50 @@ void Enemy::initGraphics(Graphics* texGraphics)
 
 void Enemy::move(float dt, const level& map)
 {
-	currentState = Idle;
+	currentState = Left; // Default to a moving state
+
+	float speed = 2.0f;
+	position.x += direction * speed;
+
+	sf::FloatRect nextStep = box.GetBox();
+	nextStep.position.x += direction * speed;
+
+	sf::FloatRect floorCheck = nextStep;
+	floorCheck.position.y += 64.f; // Look one tile down
+
+	bool hasFloor = false;
+	bool hitWall = false;
+
+	for (const auto& tile : map.getTiles())
+	{
+		sf::FloatRect tileBounds = tile.getGlobalBounds();
+
+		if (floorCheck.findIntersection(tileBounds))
+		{
+			hasFloor = true;
+		}
+
+		if (nextStep.findIntersection(tileBounds))
+		{
+			hitWall = true;
+		}
+	}
+
+	if (!hasFloor || hitWall)
+	{
+		direction *= -1;
+	}
+
 	box.Move(position);
+
+	if (direction == -1)
+	{
+		if (texGraphics) texGraphics->SetSpriteFlip(spriteID, true);
+	}
+	else
+	{
+		if (texGraphics) texGraphics->SetSpriteFlip(spriteID, false);
+	}
 
 	if (damageFlashTimer > 0.0f)
 	{
@@ -24,7 +66,8 @@ void Enemy::move(float dt, const level& map)
 	if (texGraphics)
 	{
 		std::string animName = setAnimationName(currentState);
-		texGraphics->RenderSprite(spriteID, position, animName, 0);
+		sf::Vector2f centerPos = { position.x + (50.f / 2.f), position.y + (52.f / 2.f) };
+		texGraphics->RenderSprite(spriteID, centerPos, animName, 0);
 	}
 }
 

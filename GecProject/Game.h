@@ -5,6 +5,7 @@
 #include "level.h" 
 #include "Audio.h"
 #include "HUD.h"
+#include "GameManager.h"
 
 
 class Game
@@ -38,6 +39,9 @@ private:
 	Player Alucard;
 	Enemy enemy;
     HUD* playerHUD;
+
+    GameManager manager;
+    bool hitWinTile = false;
 
     level test;
     
