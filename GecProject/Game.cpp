@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game()
 {
@@ -19,10 +20,14 @@ Game::Game()
 		std::cout << "Could not load font!" << std::endl;
 	}
 
+	levels.push_back("Data/Levels/Level1.txt");
+	levels.push_back("Data/Levels/Level1.txt");
+	currentLevelIndex = 0;
+
 	Alucard.initGraphics(loadtex);
 	Alucard.initAudio(audio);
 
-	Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+	Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
 }
 
 Game::~Game()
@@ -63,7 +68,36 @@ void Game::render()
 {
 	this->window->clear();
 
-	
+	if (uiManager.restartRequested)
+	{
+		Alucard.health = 100;
+		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+
+		Alucard.update(0.f, test, enemies);
+
+		uiManager.restartRequested = false;
+		manager.update(Alucard.health, false);
+	}
+
+	if (uiManager.nextLevelClicked)
+	{
+		if (currentLevelIndex + 1 < levels.size())
+		{
+			currentLevelIndex++;
+			Alucard.health = 100;
+			Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+
+			Alucard.update(0.f, test, enemies);
+
+			manager.update(Alucard.health, false);
+		}
+		else
+		{
+			std::cout << "You beat the final level!" << std::endl;
+		}
+
+		uiManager.nextLevelClicked = false;
+	}
 
 	bool hitWinTile = test.checkWinCondition(Alucard.box.GetBox());
 	manager.update(Alucard.health, hitWinTile);
@@ -102,18 +136,6 @@ void Game::render()
 	{
 		this->window->setView(this->window->getDefaultView());
 		uiManager.drawVictoryScreen(*this->window, winTex, gameFont);
-	}
-
-	if (uiManager.restartRequested || uiManager.nextLevelClicked)
-	{
-		Alucard.health = 100;
-		Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
-
-		uiManager.restartRequested = false;
-		uiManager.nextLevelClicked = false;
-
-		manager.update(Alucard.health, false);
-		return;
 	}
 
 	this->window->display();

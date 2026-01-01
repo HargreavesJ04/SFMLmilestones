@@ -46,6 +46,9 @@ private:
 
     level test;
 
+    std::vector<std::string> levels;
+    int currentLevelIndex;
+
     sf::Texture deathTex;
     sf::Texture winTex;
     sf::Font gameFont;
