@@ -56,8 +56,8 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 				std::string enemyName = "Enemy_" + std::to_string(enemyCount);
 
 				loadtex->createSprite(enemyName);
-				loadtex->AddAnimationSet("IDLE", enemyName, AnimationData{ "EIDLEtex", 5 });
-				loadtex->AddAnimationSet("WALK", enemyName, AnimationData{ "EWALKtex", 5 });
+				loadtex->AddAnimationSet("IDLE", enemyName, AnimationData{ "EIDLEtex", 16 });
+				loadtex->AddAnimationSet("WALK", enemyName, AnimationData{ "EWALKtex", 16 });
 
 				Enemy* newEnemy = new Enemy();
 				newEnemy->spriteID = enemyName;

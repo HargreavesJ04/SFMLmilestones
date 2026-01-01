@@ -34,7 +34,7 @@ public:
 
 	bool moving = false;
 	bool movingBack = false;
-	bool airborne;
+	bool airborne = false;
 	float xspeed = 5.f;
 	float yspeed = 5.f;
 	int health = 100;

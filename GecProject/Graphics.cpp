@@ -55,7 +55,6 @@ void Graphics::SetSpriteFlip(const std::string& spriteName, bool flip)
 	if (m_spritemap.count(spriteName))
 	{
 		Sprite2D* s = m_spritemap[spriteName];
-
 		if (flip)
 		{
 			s->sprite->setScale({ -1.f, 1.f });
@@ -67,7 +66,6 @@ void Graphics::SetSpriteFlip(const std::string& spriteName, bool flip)
 	}
 }
 
-
 void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, const std::string& spriteSetName, int frameNum)
 {
 	if (m_spritemap.find(spriteName) == m_spritemap.end() || m_spritemap[spriteName]->m_animationData.find(spriteSetName) == m_spritemap[spriteName]->m_animationData.end())
@@ -76,17 +74,28 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 	}
 
 	Sprite2D* briefName = m_spritemap[spriteName];
-	briefName->sprite->setTexture(*briefName->m_animationData[spriteSetName].texture);
+	auto& animation = briefName->m_animationData[spriteSetName];
 
-	int frameX = (int)briefName->m_animationData[spriteSetName].texture->getSize().x;
-	int frameY = (int)briefName->m_animationData[spriteSetName].texture->getSize().y / briefName->m_animationData[spriteSetName].setData.numFrames;
+	briefName->sprite->setTexture(*animation.texture);
+
+	int frameX = (int)animation.texture->getSize().x;
+	int frameY = (int)animation.texture->getSize().y / animation.setData.numFrames;
 	int topCorner = frameY * briefName->frameNumber;
 
-	briefName->sprite->setTextureRect(sf::IntRect({ 0 , topCorner }, { frameX, frameY }));
-	briefName->sprite->setOrigin({ (float)frameX / 2.f, (float)frameY / 2.f });
+	briefName->sprite->setTextureRect(sf::IntRect({ 0, topCorner }, { frameX, frameY }));
+
+	if (briefName->sprite->getScale().x < 0)
+	{
+		briefName->sprite->setOrigin({ (float)frameX, 0.f });
+	}
+	else
+	{
+		briefName->sprite->setOrigin({ 0.f, 0.f });
+	}
+
 	briefName->sprite->setPosition(pos);
 
-	if (briefName->frameNumber < briefName->m_animationData[spriteSetName].setData.numFrames - 1)
+	if (briefName->frameNumber < animation.setData.numFrames - 1)
 	{
 		briefName->frameNumber++;
 	}
@@ -95,7 +104,6 @@ void Graphics::RenderSprite(const std::string& spriteName, sf::Vector2f pos, con
 		briefName->frameNumber = 0;
 	}
 }
-
 
 void Graphics::Draw(sf::RenderWindow& window) 
 {

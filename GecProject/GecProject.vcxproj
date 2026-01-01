@@ -157,6 +157,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RedirectCout.h" />
     <ClCompile Include="Sprite2D.cpp" />
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationData.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sprite2D.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

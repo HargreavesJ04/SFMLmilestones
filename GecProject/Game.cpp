@@ -1,6 +1,5 @@
 #include "Game.h"
 
-
 Game::Game()
 {
 	initWindow();
@@ -9,12 +8,22 @@ Game::Game()
 
 	playerHUD = new HUD();
 
+	if (!deathTex.loadFromFile("Data/Textures/Background/GameOver.png"))
+		std::cout << "Failed to load death texture" << std::endl;
+
+	if (!winTex.loadFromFile("Data/Textures/Background/WinScreen.png"))
+		std::cout << "Failed to load win texture" << std::endl;
+
+	if (!gameFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf"))
+	{
+		std::cout << "Could not load font!" << std::endl;
+	}
+
 	Alucard.initGraphics(loadtex);
 	Alucard.initAudio(audio);
 
 	Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
 }
-
 
 Game::~Game()
 {
@@ -30,12 +39,10 @@ Game::~Game()
 	delete this->playerHUD;
 }
 
-
 void Game::UpdateDt()
 {
 	this->deltaTime = this->dtClock.restart().asSeconds();
 }
-
 
 void Game::updateEvents()
 {
@@ -52,17 +59,11 @@ void Game::updateEvents()
 	}
 }
 
-
 void Game::render()
 {
 	this->window->clear();
 
-	if (manager.shouldReset())
-	{
-		Alucard.health = 100;
-		Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
-		manager.clearResetFlag();
-	}
+	
 
 	bool hitWinTile = test.checkWinCondition(Alucard.box.GetBox());
 	manager.update(Alucard.health, hitWinTile);
@@ -95,15 +96,28 @@ void Game::render()
 	else if (manager.getState() == GameState::GameOver)
 	{
 		this->window->setView(this->window->getDefaultView());
+		uiManager.drawDeathScreen(*this->window, deathTex, gameFont);
 	}
 	else if (manager.getState() == GameState::Win)
 	{
 		this->window->setView(this->window->getDefaultView());
+		uiManager.drawVictoryScreen(*this->window, winTex, gameFont);
+	}
+
+	if (uiManager.restartRequested || uiManager.nextLevelClicked)
+	{
+		Alucard.health = 100;
+		Alucard.position = test.load("Data/Levels/Level1.txt", 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+
+		uiManager.restartRequested = false;
+		uiManager.nextLevelClicked = false;
+
+		manager.update(Alucard.health, false);
+		return;
 	}
 
 	this->window->display();
 }
-
 
 void Game::run()
 {
@@ -115,7 +129,6 @@ void Game::run()
 	}
 }
 
-
 void Game::initGraphics()
 {
 	loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
@@ -123,7 +136,7 @@ void Game::initGraphics()
 
 	loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
 	loadtex->createSprite("Level_Background");
-	loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex", 1 });
+	loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex", 1, 800, 600 });
 
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex");
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "ATTACKtex");
@@ -134,12 +147,10 @@ void Game::initGraphics()
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex");
 }
 
-
 void Game::initAudio()
 {
 	audio->SetMusicVolume(15.f);
 }
-
 
 void Game::initWindow()
 {

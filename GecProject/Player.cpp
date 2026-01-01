@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Enemy.h"
 
-
 void Player::move()
 {
 	Movement previousState = currentState;
@@ -67,10 +66,7 @@ void Player::move()
 	if (texGraphics)
 	{
 		std::string animName = setState(currentState);
-
-		// Align Alucard inside the 60x62 debug box
-		sf::Vector2f centerPos = { position.x + (50.f / 2.f), position.y + (52.f / 2.f) };
-		texGraphics->RenderSprite("Player", centerPos, animName, 0);
+		texGraphics->RenderSprite("Player", position, animName, 0);
 	}
 }
 
@@ -128,7 +124,7 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 	}
 
-	position.y += yspeed * 1.0f; // Gravity
+	position.y += yspeed * 1.0f;
 	box.Move(position);
 
 	for (const auto& tile : map.getTiles())
@@ -183,11 +179,11 @@ void Player::initGraphics(Graphics* texGraphics)
 {
 	Character::initGraphics(texGraphics);
 
-	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex",5 });
-	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 8 });
-	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 5 });
-	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 5 });
-	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 5 });
+	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex", 16 });
+	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 16 });
+	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 16 });
+	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 16 });
+	texGraphics->AddAnimationSet("JUMP", "Player", AnimationData{ "WALKtex", 16 });
 }
 
 void Player::initAudio(Audio* audio)
@@ -197,8 +193,6 @@ void Player::initAudio(Audio* audio)
 	audio->LoadSound("ATTACK", "Data/Audio/sfx/Alucard/cutt.wav");
 	audio->LoadSound("WALK", "Data/Audio/sfx/Alucard/alu_agh.wav");
 	audio->LoadSound("HURT", "Data/Audio/sfx/Alucard/alu_aah.wav");
-
-
 }
 
 void Player::takeDamage(int damage)

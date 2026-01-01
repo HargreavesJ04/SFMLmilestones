@@ -6,24 +6,24 @@
 #include "Audio.h"
 #include "HUD.h"
 #include "GameManager.h"
-
+#include "UIManager.h"
 
 class Game
 {
 public:
     Game();
     virtual ~Game();
- 
-    void UpdateDt();        
-    void updateEvents();          
-    void render();          
-    void run();       
+
+    void UpdateDt();
+    void updateEvents();
+    void render();
+    void run();
     void initGraphics();
     void initAudio();
 
 private:
-    void initWindow();       
-    
+    void initWindow();
+
     sf::RenderWindow* window = nullptr;
     std::optional<sf::Event> sfEvent;
 
@@ -33,19 +33,20 @@ private:
 
     Graphics* loadtex = new Graphics();
     Audio* audio = new Audio();
-	
+
     std::unordered_map<std::string, Enemy*> enemies;
     sf::Music music;
-	Player Alucard;
-	Enemy enemy;
+    Player Alucard;
+    Enemy enemy;
     HUD* playerHUD;
 
     GameManager manager;
+    UIManager uiManager;
     bool hitWinTile = false;
 
     level test;
-    
-    
+
+    sf::Texture deathTex;
+    sf::Texture winTex;
+    sf::Font gameFont;
 };
-
-
