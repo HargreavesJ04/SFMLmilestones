@@ -6,6 +6,7 @@ HUD::HUD()
 	maxBarWidth = 0.f;
 	healthBar = nullptr;
 	barFrame = nullptr;
+	scoreText = nullptr;
 }
 
 HUD::~HUD()
@@ -17,6 +18,10 @@ HUD::~HUD()
 	if (barFrame)
 	{
 		delete barFrame;
+	}
+	if (scoreText)
+	{
+		delete scoreText;
 	}
 }
 
@@ -34,9 +39,18 @@ void HUD::initGraphics(Graphics* graphics)
 
 	maxBarWidth = 75.f * 2.f;
 	healthBar->setSize({ maxBarWidth, 13.f * 2.f });
+
+	if (hudFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf"))
+	{
+		scoreText = new sf::Text(hudFont);
+		scoreText->setCharacterSize(25);
+		scoreText->setFillColor(sf::Color::White);
+		scoreText->setPosition({ 110.f, 110.f });
+		scoreText->setString("Score 0");
+	}
 }
 
-void HUD::update(int currentHealth, int maxHealth)
+void HUD::update(int currentHealth, int maxHealth, int currentScore)
 {
 	if (maxHealth <= 0 || !healthBar) return;
 
@@ -45,10 +59,16 @@ void HUD::update(int currentHealth, int maxHealth)
 	if (hpPercent < 0) hpPercent = 0;
 
 	healthBar->setSize({ maxBarWidth * hpPercent, healthBar->getSize().y });
+
+	if (scoreText)
+	{
+		scoreText->setString("Score " + std::to_string(currentScore));
+	}
 }
 
 void HUD::draw(sf::RenderWindow& window)
 {
 	if (barFrame) window.draw(*barFrame);
 	if (healthBar) window.draw(*healthBar);
+	if (scoreText) window.draw(*scoreText);
 }

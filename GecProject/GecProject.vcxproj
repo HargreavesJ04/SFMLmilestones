@@ -146,6 +146,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="healthItem.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="IMGUI\imgui-SFML.cpp" />
     <ClCompile Include="IMGUI\imgui.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="healthItem.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="Player.h" />

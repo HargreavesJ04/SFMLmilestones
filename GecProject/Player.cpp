@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Enemy.h"
 
+
+
 void Player::move()
 {
 	Movement previousState = currentState;
@@ -40,7 +42,6 @@ void Player::move()
 		attackTimer = 0.4f;
 		currentState = Attack;
 	}
-
 	if (isAttacking)
 	{
 		currentState = Attack;
@@ -99,7 +100,13 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		{
 			if (attackHitbox.findIntersection(enemy->box.GetBox()))
 			{
+				bool wasAlive = (enemy->health > 0);
 				enemy->takeDamage(20);
+
+				if (wasAlive && enemy->health <= 0)
+				{
+					score += 500;
+				}
 			}
 		}
 	}
@@ -191,7 +198,7 @@ void Player::initAudio(Audio* audio)
 	Character::initAudio(audio);
 
 	audio->LoadSound("ATTACK", "Data/Audio/sfx/Alucard/cutt.wav");
-	audio->LoadSound("WALK", "Data/Audio/sfx/Alucard/alu_agh.wav");
+	audio->LoadSound("WALK", "Data/Audio/sfx/Alucard/walk.wav");
 	audio->LoadSound("HURT", "Data/Audio/sfx/Alucard/alu_aah.wav");
 }
 

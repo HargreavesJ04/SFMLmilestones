@@ -7,6 +7,8 @@
 #include "HUD.h"
 #include "GameManager.h"
 #include "UIManager.h"
+#include "healthItem.h"
+
 
 class Game
 {
@@ -35,6 +37,10 @@ private:
     Audio* audio = new Audio();
 
     std::unordered_map<std::string, Enemy*> enemies;
+    std::vector<healthItem*> healthItems;
+
+	
+
     //sf::Music music;
     Player Alucard;
     Enemy enemy;

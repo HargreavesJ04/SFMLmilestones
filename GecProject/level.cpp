@@ -13,15 +13,17 @@ level::~level()
 	}
 }
 
-sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap)
+sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap, std::vector<healthItem*>& items)
 {
 	tiles.clear();
 	bgtiles.clear();
 	enemyMap.clear();
+	items.clear();
 	bgSpriteName = bgName;
 
 	sf::Vector2f playerStartPos({ 0.f, 0.f });
 	int enemyCount = 0;
+	int itemCount = 0;
 
 	miniView.setSize({ 800.f, 600.f });
 	miniView.setViewport(sf::FloatRect({ 0.75f, 0.f }, { 0.25f, 0.25f }));
@@ -67,8 +69,25 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 				enemyMap[enemyName] = newEnemy;
 				enemyCount++;
 			}
+			else if (line[col] == 'H')
+			{
+				std::string itemName = "Health_" + std::to_string(itemCount);
 
-			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E' || line[col] == 'W')
+				loadtex->createSprite(itemName);
+				loadtex->AddAnimationSet("IDLE", itemName, AnimationData{ "HealthItem", 1 });
+
+				healthItem* newItem = new healthItem();
+				newItem->spriteID = itemName;
+				newItem->initGraphics(loadtex);
+				newItem->position = { xPos, yPos };
+
+				newItem->box.Move(newItem->position);
+
+				items.push_back(newItem);
+				itemCount++;
+			}
+
+			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E' || line[col] == 'W' || line[col] == 'H')
 			{
 				sf::RectangleShape bgtile({ tileSize, tileSize });
 				bgtile.setPosition({ xPos, yPos });

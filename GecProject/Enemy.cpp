@@ -71,7 +71,7 @@ void Enemy::move(float dt, const level& map)
 	}
 }
 
-void Enemy::takeDamage(int damage)
+void Enemy::takeDamage(int damage) 
 {
 	if (damageFlashTimer <= 0.0f)
 	{

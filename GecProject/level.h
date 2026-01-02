@@ -1,33 +1,32 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <unordered_map>
 #include "Graphics.h"
 #include "Audio.h"
-#include <fstream>
-#include "SFML/Graphics/View.hpp"
-#include <unordered_map>
-
-class Enemy;
-
+#include "healthItem.h"
 
 class level
 {
 public:
 
-    level();
-    ~level();
+	level();
+	~level();
 
-    sf::Vector2f load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap);
-    void draw(sf::RenderWindow& window, Graphics* loadtex);
-    const std::vector<sf::RectangleShape>& getTiles() const;
+	sf::Vector2f load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, class Enemy*>& enemyMap, std::vector<class healthItem*>& items);
+	void draw(sf::RenderWindow& window, Graphics* loadtex);
+
+	const std::vector<sf::RectangleShape>& getTiles() const;
 	bool checkWinCondition(sf::FloatRect playerBox);
 
-    sf::View miniView;
-    sf::Sprite* miniMapFrame = nullptr;
-    
 private:
-    std::vector<sf::RectangleShape> tiles;
+
+	std::vector<sf::RectangleShape> tiles;
 	std::vector<sf::RectangleShape> bgtiles;
 	std::string bgSpriteName;
-  
+
+	sf::View miniView;
+	sf::Sprite* miniMapFrame = nullptr;
 };

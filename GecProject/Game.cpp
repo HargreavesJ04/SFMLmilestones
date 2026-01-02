@@ -20,7 +20,7 @@ Game::Game()
 	Alucard.initGraphics(loadtex);
 	Alucard.initAudio(audio);
 
-	Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+	Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems);
 }
 
 Game::~Game()
@@ -30,6 +30,12 @@ Game::~Game()
 		delete pair.second;
 	}
 	enemies.clear();
+
+	for (auto* item : healthItems)
+	{
+		delete item;
+	}
+	healthItems.clear();
 
 	delete this->window;
 	delete this->loadtex;
@@ -64,7 +70,8 @@ void Game::render()
 	if (uiManager.restartRequested)
 	{
 		Alucard.health = 100;
-		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+		Alucard.score = 0;
+		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems);
 		Alucard.update(0.f, test, enemies);
 		uiManager.restartRequested = false;
 		manager.update(Alucard.health, false);
@@ -76,7 +83,7 @@ void Game::render()
 		{
 			currentLevelIndex++;
 			Alucard.health = 100;
-			Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
+			Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems);
 			Alucard.update(0.f, test, enemies);
 			manager.update(Alucard.health, false);
 		}
@@ -98,9 +105,37 @@ void Game::render()
 		for (auto const& [name, e] : enemies) //collision detection between player and enemies 
 		{
 			e->move(deltaTime, test);
+
+			if (Alucard.isAttacking && Alucard.CheckCollision(e->box.GetBox()))
+			{
+				bool wasAlive = (e->health > 0);
+				e->takeDamage(10);
+
+				if (wasAlive && e->health <= 0)
+				{
+					Alucard.score += 500;
+				}
+			}
+
 			if (Alucard.CheckCollision(e->box.GetBox()))
 			{
-				Alucard.takeDamage(50);
+				Alucard.takeDamage(20);
+			}
+		}
+
+		for (auto* item : healthItems)
+		{
+			if (!item->isCollected)
+			{
+				loadtex->RenderSprite(item->spriteID, item->position, "IDLE", 0);
+
+				if (Alucard.CheckCollision(item->box.GetBox()))
+				{
+					item->onPickup();
+					Alucard.health += 20;
+					Alucard.score += 100;
+					if (Alucard.health > 100) Alucard.health = 100;
+				}
 			}
 		}
 
@@ -133,7 +168,7 @@ void Game::render()
 		loadtex->Draw(*this->window);
 
 		this->window->setView(this->window->getDefaultView());
-		playerHUD->update(Alucard.health, 100);
+		playerHUD->update(Alucard.health, 100, Alucard.score);
 		playerHUD->draw(*this->window);
 	}
 	else if (manager.getState() == GameState::GameOver)
@@ -191,6 +226,9 @@ void Game::initGraphics()
 	// Load UI Textures 
 	loadtex->loadTexture("Data/Textures/Background/GameOver.png", "DeathTex");
 	loadtex->loadTexture("Data/Textures/Background/WinScreen.png", "WinTex");
+
+	//items
+	loadtex->loadTexture("Data/Textures/Items/Health.png", "HealthItem");
 }
 
 void Game::initAudio()
