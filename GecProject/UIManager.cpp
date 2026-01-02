@@ -35,7 +35,7 @@ void UIManager::drawDeathScreen(sf::RenderWindow& window)
 
 	sf::FloatRect textBounds = text.getLocalBounds();
 	text.setOrigin({ textBounds.position.x + textBounds.size.x / 2.0f, textBounds.position.y + textBounds.size.y / 2.0f });
-	text.setPosition({ 400.f, 300.f });
+	text.setPosition({ 400.f, 100.f });
 
 	sf::RectangleShape textBox;
 	textBox.setSize({ textBounds.size.x + 20.f, textBounds.size.y + 10.f });

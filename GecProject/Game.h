@@ -35,7 +35,7 @@ private:
     Audio* audio = new Audio();
 
     std::unordered_map<std::string, Enemy*> enemies;
-    sf::Music music;
+    //sf::Music music;
     Player Alucard;
     Enemy enemy;
     HUD* playerHUD;

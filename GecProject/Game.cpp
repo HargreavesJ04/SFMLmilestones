@@ -95,7 +95,7 @@ void Game::render()
 	{
 		Alucard.update(deltaTime, test, enemies);
 
-		for (auto const& [name, e] : enemies)
+		for (auto const& [name, e] : enemies) //collision detection between player and enemies 
 		{
 			e->move(deltaTime, test);
 			if (Alucard.CheckCollision(e->box.GetBox()))
@@ -104,7 +104,7 @@ void Game::render()
 			}
 		}
 
-		sf::View mainView;
+		sf::View mainView; //main camera view thats follows player
 		mainView.setSize({ 400.f, 300.f });
 		mainView.setCenter(Alucard.position);
 		this->window->setView(mainView);
@@ -123,7 +123,7 @@ void Game::render()
 
 		this->window->draw(minimapBg);
 
-		sf::View minimapView;
+		sf::View minimapView; //minimap view that also follows player so player can see surroundings
 		minimapView.setCenter(Alucard.position);
 		minimapView.setSize({ 1600.f, 1200.f });
 		minimapView.setViewport(sf::FloatRect({ 0.75f, 0.05f }, { 0.2f, 0.2f }));
@@ -200,6 +200,6 @@ void Game::initAudio()
 
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }), "GEC Project");
+	this->window = new sf::RenderWindow(sf::VideoMode({ 800, 600 }), "GEC Project [Totally NOT Castlevania]");
 	this->window->setFramerateLimit(20);
 }
