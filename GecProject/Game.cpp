@@ -8,20 +8,13 @@ Game::Game()
 	initAudio();
 
 	playerHUD = new HUD();
+	playerHUD->initGraphics(loadtex);
 
-	if (!deathTex.loadFromFile("Data/Textures/Background/GameOver.png"))
-		std::cout << "Failed to load death texture" << std::endl;
-
-	if (!winTex.loadFromFile("Data/Textures/Background/WinScreen.png"))
-		std::cout << "Failed to load win texture" << std::endl;
-
-	if (!gameFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf"))
-	{
-		std::cout << "Could not load font!" << std::endl;
-	}
+	uiManager.initGraphics(loadtex);
 
 	levels.push_back("Data/Levels/Level1.txt");
-	levels.push_back("Data/Levels/Level1.txt");
+	levels.push_back("Data/Levels/Level1.txt"); //placeholder for level 2 just here to test level switching
+
 	currentLevelIndex = 0;
 
 	Alucard.initGraphics(loadtex);
@@ -72,9 +65,7 @@ void Game::render()
 	{
 		Alucard.health = 100;
 		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
-
 		Alucard.update(0.f, test, enemies);
-
 		uiManager.restartRequested = false;
 		manager.update(Alucard.health, false);
 	}
@@ -86,9 +77,7 @@ void Game::render()
 			currentLevelIndex++;
 			Alucard.health = 100;
 			Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies);
-
 			Alucard.update(0.f, test, enemies);
-
 			manager.update(Alucard.health, false);
 		}
 		else
@@ -124,18 +113,42 @@ void Game::render()
 		loadtex->Draw(*this->window);
 
 		this->window->setView(this->window->getDefaultView());
+
+		sf::RectangleShape minimapBg;
+		minimapBg.setSize({ 160.f, 120.f });
+		minimapBg.setPosition({ 600.f, 30.f });
+		minimapBg.setFillColor(sf::Color(80, 0, 0, 200));
+		minimapBg.setOutlineThickness(2.f);
+		minimapBg.setOutlineColor(sf::Color(150, 20, 20));
+
+		this->window->draw(minimapBg);
+
+		sf::View minimapView;
+		minimapView.setCenter(Alucard.position);
+		minimapView.setSize({ 1600.f, 1200.f });
+		minimapView.setViewport(sf::FloatRect({ 0.75f, 0.05f }, { 0.2f, 0.2f }));
+		this->window->setView(minimapView);
+
+		test.draw(*this->window, loadtex);
+		loadtex->Draw(*this->window);
+
+		this->window->setView(this->window->getDefaultView());
 		playerHUD->update(Alucard.health, 100);
 		playerHUD->draw(*this->window);
 	}
 	else if (manager.getState() == GameState::GameOver)
 	{
+		audio->StopMusic();
+		Alucard.stopSound("WALK");
 		this->window->setView(this->window->getDefaultView());
-		uiManager.drawDeathScreen(*this->window, deathTex, gameFont);
+		uiManager.drawDeathScreen(*this->window);
 	}
 	else if (manager.getState() == GameState::Win)
 	{
+		audio->StopMusic();
+		Alucard.stopSound("WALK");
 		this->window->setView(this->window->getDefaultView());
-		uiManager.drawVictoryScreen(*this->window, winTex, gameFont);
+		uiManager.drawVictoryScreen(*this->window);
 	}
 
 	this->window->display();
@@ -153,20 +166,31 @@ void Game::run()
 
 void Game::initGraphics()
 {
+	//tiles 
 	loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
 	loadtex->loadTexture("Data/Textures/Tilesets/dirt2.png", "Tilesetbg");
 
+	//level background 
 	loadtex->loadTexture("Data/Textures/Background/Background.png", "Backgroundtex");
 	loadtex->createSprite("Level_Background");
 	loadtex->AddAnimationSet("Background", "Level_Background", AnimationData{ "Backgroundtex", 1, 800, 600 });
 
+	//Player Textures
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "IDLEtex");
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "ATTACKtex");
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "WALKtex");
 	loadtex->createSprite("Player");
 
+	//Enemy Textures
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EIDLEtex");
 	loadtex->loadTexture("Data/Textures/AlucardSprites/ALwalk.png", "EWALKtex");
+
+	//HUD Textures
+	loadtex->loadTexture("Data/UI/alucardHpBar.png", "HUDtex");
+
+	// Load UI Textures 
+	loadtex->loadTexture("Data/Textures/Background/GameOver.png", "DeathTex");
+	loadtex->loadTexture("Data/Textures/Background/WinScreen.png", "WinTex");
 }
 
 void Game::initAudio()

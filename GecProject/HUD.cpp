@@ -1,39 +1,54 @@
 #include "HUD.h"
 
+
 HUD::HUD()
 {
-	healthBarBack = new sf::RectangleShape(sf::Vector2f(200.f, 20.f));
-	healthBarBack->setFillColor(sf::Color(100, 0, 0));
-
-	healthBarFront = new sf::RectangleShape(sf::Vector2f(200.f, 20.f));
-	healthBarFront->setFillColor(sf::Color::Red);
+	maxBarWidth = 0.f;
+	healthBar = nullptr;
+	barFrame = nullptr;
 }
 
 HUD::~HUD()
 {
-	delete healthBarBack;
-	delete healthBarFront;
+	if (healthBar)
+	{
+		delete healthBar;
+	}
+	if (barFrame)
+	{
+		delete barFrame;
+	}
+}
+
+void HUD::initGraphics(Graphics* graphics)
+{
+	const sf::Texture& tex = graphics->getTexture("HUDtex");
+	barFrame = new sf::Sprite(tex);
+
+	barFrame->setPosition({ 20.f, 0.f });
+	barFrame->setScale({3.f, 3.f});
+
+	healthBar = new sf::RectangleShape();
+	healthBar->setPosition({ 110.f, 75.f });
+	healthBar->setFillColor(sf::Color(180, 0, 0));
+
+	maxBarWidth = 75.f * 2.f;
+	healthBar->setSize({ maxBarWidth, 13.f * 2.f });
 }
 
 void HUD::update(int currentHealth, int maxHealth)
 {
-	float healthPercent = static_cast<float>(currentHealth) / static_cast<float>(maxHealth);
+	if (maxHealth <= 0 || !healthBar) return;
 
-	if (healthPercent < 0.f) healthPercent = 0.f; //clamp to 0 so it wont go negative 
+	float hpPercent = static_cast<float>(currentHealth) / static_cast<float>(maxHealth);
 
-	healthBarFront->setScale({ healthPercent, 1.f }); 
+	if (hpPercent < 0) hpPercent = 0;
+
+	healthBar->setSize({ maxBarWidth * hpPercent, healthBar->getSize().y });
 }
 
 void HUD::draw(sf::RenderWindow& window)
 {
-	sf::View oldView = window.getView();
-	window.setView(window.getDefaultView());
-
-	healthBarBack->setPosition({ 10.f, 10.f });
-	healthBarFront->setPosition({10.f, 10.f});
-
-	window.draw(*healthBarBack);
-	window.draw(*healthBarFront);
-	window.setView(oldView);
+	if (barFrame) window.draw(*barFrame);
+	if (healthBar) window.draw(*healthBar);
 }
-
