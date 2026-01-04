@@ -60,10 +60,10 @@ void HUD::update(int currentHealth, int maxHealth, int currentScore)
 
 	healthBar->setSize({ maxBarWidth * hpPercent, healthBar->getSize().y });
 
-	if (scoreText)
-	{
-		scoreText->setString("Score " + std::to_string(currentScore));
-	}
+	
+	
+	scoreText->setString("Score " + std::to_string(currentScore));
+	
 }
 
 void HUD::draw(sf::RenderWindow& window)

@@ -2,10 +2,7 @@
 
 UIManager::UIManager()
 {
-	if (!gameFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf"))
-	{
-		std::cout << "Could not load font!" << std::endl;
-	}
+	gameFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf");
 }
 
 UIManager::~UIManager()

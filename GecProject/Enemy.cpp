@@ -8,16 +8,62 @@ void Enemy::initGraphics(Graphics* texGraphics)
 
 void Enemy::move(float dt, const level& map)
 {
-	currentState = Left; // Default to a moving state
+	currentState = (direction == 1) ? Right : Left;
 
 	float speed = 2.0f;
 	position.x += direction * speed;
 
-	sf::FloatRect nextStep = box.GetBox();
-	nextStep.position.x += direction * speed;
+	box.Move(position);
+	for (const auto& tile : map.getTiles())
+	{
+		auto intersect = box.GetIntersection(tile.getGlobalBounds());
+		if (intersect.has_value())
+		{
+			if (intersect->size.x < intersect->size.y)
+			{
+				if (position.x < tile.getPosition().x)
+				{
+					position.x -= intersect->size.x;
+				}
+				else
+				{
+					position.x += intersect->size.x;
+				}
+				box.Move(position);
+			}
+		}
+	}
 
-	sf::FloatRect floorCheck = nextStep;
-	floorCheck.position.y += 64.f; // Look one tile down
+	position.y += yspeed * 1.0f;
+	box.Move(position);
+
+	for (const auto& tile : map.getTiles())
+	{
+		auto intersect = box.GetIntersection(tile.getGlobalBounds());
+		if (intersect.has_value())
+		{
+			if (intersect->size.y <= intersect->size.x)
+			{
+				if (position.y < tile.getPosition().y)
+				{
+					position.y -= intersect->size.y;
+				}
+				else
+				{
+					position.y += intersect->size.y;
+				}
+				box.Move(position);
+			}
+		}
+	}
+
+	sf::FloatRect bounds = box.GetBox();
+	sf::FloatRect wallCheck = bounds;
+	wallCheck.position.x += (direction * speed);
+
+	sf::FloatRect floorCheck = bounds;
+	floorCheck.position.x += (direction * (bounds.size.x / 2.f));
+	floorCheck.position.y += bounds.size.y + 10.f;
 
 	bool hasFloor = false;
 	bool hitWall = false;
@@ -25,24 +71,14 @@ void Enemy::move(float dt, const level& map)
 	for (const auto& tile : map.getTiles())
 	{
 		sf::FloatRect tileBounds = tile.getGlobalBounds();
-
-		if (floorCheck.findIntersection(tileBounds))
-		{
-			hasFloor = true;
-		}
-
-		if (nextStep.findIntersection(tileBounds))
-		{
-			hitWall = true;
-		}
+		if (floorCheck.findIntersection(tileBounds)) hasFloor = true;
+		if (wallCheck.findIntersection(tileBounds)) hitWall = true;
 	}
 
 	if (!hasFloor || hitWall)
 	{
 		direction *= -1;
 	}
-
-	box.Move(position);
 
 	if (direction == -1)
 	{
@@ -66,12 +102,11 @@ void Enemy::move(float dt, const level& map)
 	if (texGraphics)
 	{
 		std::string animName = setAnimationName(currentState);
-		sf::Vector2f centerPos = { position.x + (50.f / 2.f), position.y + (52.f / 2.f) };
-		texGraphics->RenderSprite(spriteID, centerPos, animName, 0);
+		texGraphics->RenderSprite(spriteID, position, animName, 0);
 	}
 }
 
-void Enemy::takeDamage(int damage) 
+void Enemy::takeDamage(int damage)
 {
 	if (damageFlashTimer <= 0.0f)
 	{
