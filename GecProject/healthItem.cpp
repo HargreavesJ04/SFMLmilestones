@@ -11,8 +11,7 @@ void healthItem::onPickup()
 	position = { -5000.f, -5000.f };
 	box.Move(position);
 
-	
-	
+
 	texGraphics->RenderSprite(spriteID, position, "IDLE", 0);
 	
 }

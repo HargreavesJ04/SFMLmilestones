@@ -8,10 +8,10 @@ Collision::Collision(sf::FloatRect boxcollider)
 
 void Collision::Move(sf::Vector2f newPosition)
 {
-    collider.position = newPosition;
+	collider.position = newPosition; // Update the position of the collider 
 }
 
-bool Collision::CheckCollision(sf::FloatRect OtherActor)
+bool Collision::CheckCollision(sf::FloatRect OtherActor) // Check for collision with another actor
 {
    
     if (const std::optional intersection = collider.findIntersection(OtherActor))
@@ -25,5 +25,5 @@ bool Collision::CheckCollision(sf::FloatRect OtherActor)
 
 std::optional<sf::FloatRect> Collision::GetIntersection(sf::FloatRect OtherActor)
 {
-    return collider.findIntersection(OtherActor);
+	return collider.findIntersection(OtherActor); // Return the intersection rectangle if there is a collision
 }

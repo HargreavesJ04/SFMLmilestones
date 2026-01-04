@@ -7,12 +7,10 @@ level::level()
 
 level::~level()
 {
-	if (miniMapFrame != nullptr)
-	{
-		delete miniMapFrame;
-	}
+	
 }
 
+//I hate this its lazy 
 sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex, std::string bgName, std::string musicName, Audio* audio, std::unordered_map<std::string, Enemy*>& enemyMap, std::vector<healthItem*>& items)
 {
 	tiles.clear();
@@ -34,7 +32,7 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 	std::string line;
 	int row = 0;
 
-	while (std::getline(file, line))
+	while (std::getline(file, line)) //parses a text file and loops through each tile char by char
 	{
 		for (int col = 0; col < (int)line.length(); col++)
 		{
@@ -58,7 +56,7 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 				std::string enemyName = "Enemy_" + std::to_string(enemyCount);
 
 				loadtex->createSprite(enemyName);
-				loadtex->AddAnimationSet("IDLE", enemyName, AnimationData{ "EIDLEtex", 16 });
+				loadtex->AddAnimationSet("IDLE", enemyName, AnimationData{ "EIDLEtex", 16 }); //if needed but redudant for this enemy type
 				loadtex->AddAnimationSet("WALK", enemyName, AnimationData{ "EWALKtex", 16 });
 
 				Enemy* newEnemy = new Enemy();
@@ -87,7 +85,7 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 				itemCount++;
 			}
 
-			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E' || line[col] == 'W' || line[col] == 'H')
+			if (line[col] == '.' || line[col] == ' ' || line[col] == 'P' || line[col] == 'E' || line[col] == 'W' || line[col] == 'H') //adds bg tile to special tiles so its not a back hole
 			{
 				sf::RectangleShape bgtile({ tileSize, tileSize });
 				bgtile.setPosition({ xPos, yPos });
@@ -106,9 +104,9 @@ sf::Vector2f level::load(std::string fileName, float tileSize, Graphics* loadtex
 	return playerStartPos;
 }
 
-void level::draw(sf::RenderWindow& window, Graphics* loadtex)
+void level::draw(sf::RenderWindow& window, Graphics* loadtex) // you are not gonna belive what this does
 {
-	loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0);
+	loadtex->RenderSprite("Level_Background", sf::Vector2f(-300.f, 0.f), "Background", 0); //background is loaded first so tileset and other draw textures are in FRONT of it 
 	for (auto& bgtile : bgtiles)
 	{
 		window.draw(bgtile);
@@ -119,7 +117,7 @@ void level::draw(sf::RenderWindow& window, Graphics* loadtex)
 	}
 }
 
-const std::vector<sf::RectangleShape>& level::getTiles() const
+const std::vector<sf::RectangleShape>& level::getTiles() const //player uses this so it can see WHAT tile they are colliding with
 {
 	return tiles;
 }

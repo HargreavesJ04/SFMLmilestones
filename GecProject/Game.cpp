@@ -23,9 +23,9 @@ Game::Game()
 	Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems);
 }
 
-Game::~Game()
+Game::~Game() //cleanup dynamically allocated memory to avoid memeory leaks this is why I prefer raw pointers 
 {
-	for (auto& pair : enemies)
+	for (auto& pair : enemies) 
 	{
 		delete pair.second;
 	}
@@ -71,7 +71,7 @@ void Game::render()
 	{
 		Alucard.health = 100;
 		Alucard.score = 0;
-		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems);
+		Alucard.position = test.load(levels[currentLevelIndex], 32.f, loadtex, "Level_Background", "Data/Audio/Vampire-Killer.wav", audio, enemies, healthItems); //I shouldve used a struct
 		Alucard.update(0.f, test, enemies);
 		uiManager.restartRequested = false;
 		manager.update(Alucard.health, false);
@@ -89,14 +89,14 @@ void Game::render()
 		}
 		else
 		{
-			std::cout << "You beat the final level!" << std::endl;
+			std::cout << "You beat the final level!" << std::endl; //placeholder for ending sequence but I only load level 1 twice so its never used
 		}
 
 		uiManager.nextLevelClicked = false;
 	}
 
 	bool hitWinTile = test.checkWinCondition(Alucard.box.GetBox());
-	manager.update(Alucard.health, hitWinTile);
+	manager.update(Alucard.health, hitWinTile); //win!
 
 	if (manager.getState() == GameState::Playing)
 	{
@@ -117,7 +117,7 @@ void Game::render()
 				}
 			}
 
-			if (Alucard.CheckCollision(e->box.GetBox()))
+			if (Alucard.CheckCollision(e->box.GetBox())) 
 			{
 				Alucard.takeDamage(30);
 			}
@@ -145,11 +145,11 @@ void Game::render()
 		this->window->setView(mainView);
 
 		test.draw(*this->window, loadtex);
-		loadtex->Draw(*this->window);
+		loadtex->Draw(*this->window); //these load all the level and entity sprites 
 
 		this->window->setView(this->window->getDefaultView());
 
-		sf::RectangleShape minimapBg;
+		sf::RectangleShape minimapBg; //placeholder background for minimap 
 		minimapBg.setSize({ 160.f, 120.f });
 		minimapBg.setPosition({ 600.f, 30.f });
 		minimapBg.setFillColor(sf::Color(80, 0, 0, 200));
@@ -165,12 +165,13 @@ void Game::render()
 		this->window->setView(minimapView);
 
 		test.draw(*this->window, loadtex);
-		loadtex->Draw(*this->window);
+		loadtex->Draw(*this->window); //minimap version of above code however you can just call a texture and zoom in instead which is accurate to normal metroidvanias 
 
 		this->window->setView(this->window->getDefaultView());
 		playerHUD->update(Alucard.health, 100, Alucard.score);
 		playerHUD->draw(*this->window);
 	}
+
 	else if (manager.getState() == GameState::GameOver)
 	{
 		audio->StopMusic();
@@ -199,7 +200,7 @@ void Game::run()
 	}
 }
 
-void Game::initGraphics()
+void Game::initGraphics() //loads textures on game start so they are already in memory 
 {
 	//tiles 
 	loadtex->loadTexture("Data/Textures/Tilesets/dirt.png", "Tileset");
@@ -233,7 +234,7 @@ void Game::initGraphics()
 
 void Game::initAudio()
 {
-	audio->SetMusicVolume(15.f);
+	audio->SetMusicVolume(15.f); //kept music volume in a seperate function for easy adjustment
 }
 
 void Game::initWindow()

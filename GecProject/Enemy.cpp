@@ -1,6 +1,9 @@
 #include "Enemy.h"
 #include "level.h"
 
+
+//to be expected from somethinbg that also inherits from character a lot of the code here mirrors player 
+
 void Enemy::initGraphics(Graphics* texGraphics)
 {
 	Character::initGraphics(texGraphics);

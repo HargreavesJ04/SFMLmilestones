@@ -3,13 +3,13 @@
 
 void Character::initGraphics(Graphics* graphics)
 {
-	texGraphics = graphics;
+	texGraphics = graphics; //points to the loaded graphics 
 }
 
 
 void Character::initAudio(Audio* audio)
 {
-	sfxaudio = audio;
+	sfxaudio = audio; 
 }
 
 
@@ -19,6 +19,7 @@ void Character::takeDamage(int damage)
 	if (health < 0) health = 0;
 }
 
+//collision with other entities think of like casting in unreal or unity 
 
 bool Character::CheckCollision(Character& other)
 {
@@ -32,6 +33,7 @@ bool Character::CheckCollision(sf::FloatRect rect)
 	return box.CheckCollision(rect);
 }
 
+//audio functions
 
 void Character::playSound(const std::string& name)
 {

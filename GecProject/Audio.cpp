@@ -3,6 +3,7 @@
 Audio::Audio()
 {
 }
+//I love audio in sfml because its similar to graphics and its easy to infer what everything here does without documentation 
 
 Audio::~Audio()
 {

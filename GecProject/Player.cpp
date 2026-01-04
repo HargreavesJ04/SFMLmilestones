@@ -19,22 +19,16 @@ void Player::move()
 		position.x -= xspeed;
 		currentState = Left;
 		faceDir = -1;
-
-		if (texGraphics)
-		{
-			texGraphics->SetSpriteFlip("Player", true);
-		}
+		texGraphics->SetSpriteFlip("Player", true);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		position.x += xspeed;
 		currentState = Right;
 		faceDir = 1;
-
-		if (texGraphics)
-		{
-			texGraphics->SetSpriteFlip("Player", false);
-		}
+		texGraphics->SetSpriteFlip("Player", false);
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isAttacking)
 	{
@@ -42,12 +36,9 @@ void Player::move()
 		attackTimer = 0.4f;
 		currentState = Attack;
 	}
-	if (isAttacking)
-	{
-		currentState = Attack;
-	}
+	
 
-	box.Move(position);
+	box.Move(position); //similar to sfml documentation getglobal bounds so collision box follows player position
 
 	if (currentState != previousState)
 	{
@@ -64,14 +55,14 @@ void Player::move()
 		}
 	}
 
-	if (texGraphics)
+	if (texGraphics) //update player anim based on state
 	{
 		std::string animName = setState(currentState);
 		texGraphics->RenderSprite("Player", position, animName, 0);
 	}
 }
 
-void Player::update(float dt, const level& map, std::unordered_map<std::string, Enemy*>& enemies)
+void Player::update(float dt, const level& map, std::unordered_map<std::string, Enemy*>& enemies) 
 {
 	move();
 	box.Move(position);
@@ -87,13 +78,13 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		sf::FloatRect attackHitbox;
 		float range = 35.0f;
 
-		if (faceDir == 1)
+		if (faceDir == 1) //sets players center of origin for flipping 
 		{
 			attackHitbox = sf::FloatRect({ position.x + 60.f * 0.7f, position.y + 62.f * 0.2f }, { range, 62.f * 0.6f });
 		}
 		else
 		{
-			attackHitbox = sf::FloatRect({ position.x - range, position.y + 62.f * 0.2f }, { range, 62.f * 0.6f });
+			attackHitbox = sf::FloatRect({ position.x - range, position.y + 62.f * 0.2f }, { range, 62.f * 0.6f }); //we love magic numbers
 		}
 
 		for (auto const& [name, enemy] : enemies)
@@ -111,7 +102,9 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 	}
 
-	for (const auto& tile : map.getTiles())
+	//I check the x and y collisions separately to avoid corner sticking it is based on unity rigid body collision handling
+
+	for (const auto& tile : map.getTiles()) 
 	{
 		auto intersect = box.GetIntersection(tile.getGlobalBounds());
 		if (intersect.has_value())
@@ -131,7 +124,7 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 	}
 
-	position.y += yspeed * 1.0f;
+	position.y += yspeed * 1.0f; //adds gravity and updates position because if not you will be floating
 	box.Move(position);
 
 	for (const auto& tile : map.getTiles())
@@ -155,6 +148,7 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		}
 	}
 
+	//added so player doesnt just die in a couple frames and added visual feedback for taking damage for debugging and overall style 
 	if (Iframes > 0.0f)
 	{
 		Iframes -= dt;
@@ -173,7 +167,7 @@ void Player::update(float dt, const level& map, std::unordered_map<std::string, 
 		texGraphics->SetSpriteColour("Player", sf::Color::White);
 	}
 
-	if (health <= 0)
+	if (health <= 0) //worlds most jank death handling please dont judge me it was easy 
 	{
 		position = { -10000.f, -10000.f };
 		box.Move(position);
@@ -186,7 +180,7 @@ void Player::initGraphics(Graphics* texGraphics)
 {
 	Character::initGraphics(texGraphics);
 
-	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex", 16 });
+	texGraphics->AddAnimationSet("IDLE", "Player", AnimationData{ "IDLEtex", 16 }); //only need to pass through frames animationData handles the texture size
 	texGraphics->AddAnimationSet("ATTACK", "Player", AnimationData{ "ATTACKtex", 16 });
 	texGraphics->AddAnimationSet("WALK", "Player", AnimationData{ "WALKtex", 16 });
 	texGraphics->AddAnimationSet("CROUCH", "Player", AnimationData{ "WALKtex", 16 });

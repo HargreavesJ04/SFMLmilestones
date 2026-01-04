@@ -30,6 +30,8 @@ void HUD::initGraphics(Graphics* graphics)
 	const sf::Texture& tex = graphics->getTexture("HUDtex");
 	barFrame = new sf::Sprite(tex);
 
+	//I hard coded these values based on the hud image and how I wanted it to look
+
 	barFrame->setPosition({ 20.f, 0.f });
 	barFrame->setScale({3.f, 3.f});
 
@@ -40,14 +42,14 @@ void HUD::initGraphics(Graphics* graphics)
 	maxBarWidth = 75.f * 2.f;
 	healthBar->setSize({ maxBarWidth, 13.f * 2.f });
 
-	if (hudFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf"))
-	{
-		scoreText = new sf::Text(hudFont);
-		scoreText->setCharacterSize(25);
-		scoreText->setFillColor(sf::Color::White);
-		scoreText->setPosition({ 110.f, 110.f });
-		scoreText->setString("Score 0");
-	}
+	hudFont.openFromFile("Data/Fonts/SymphonyoftheNightfont.ttf");
+	
+	scoreText = new sf::Text(hudFont);
+	scoreText->setCharacterSize(25);
+	scoreText->setFillColor(sf::Color::White);
+	scoreText->setPosition({ 110.f, 110.f });
+	scoreText->setString("Score 0");
+	
 }
 
 void HUD::update(int currentHealth, int maxHealth, int currentScore)
@@ -56,12 +58,9 @@ void HUD::update(int currentHealth, int maxHealth, int currentScore)
 
 	float hpPercent = static_cast<float>(currentHealth) / static_cast<float>(maxHealth);
 
-	if (hpPercent < 0) hpPercent = 0;
+	if (hpPercent < 0) hpPercent = 0; //stops bar from going negative
 
-	healthBar->setSize({ maxBarWidth * hpPercent, healthBar->getSize().y });
-
-	
-	
+	healthBar->setSize({ maxBarWidth * hpPercent, healthBar->getSize().y }); //update health bar size
 	scoreText->setString("Score " + std::to_string(currentScore));
 	
 }
