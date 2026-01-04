@@ -119,7 +119,7 @@ void Game::render()
 
 			if (Alucard.CheckCollision(e->box.GetBox()))
 			{
-				Alucard.takeDamage(20);
+				Alucard.takeDamage(30);
 			}
 		}
 
